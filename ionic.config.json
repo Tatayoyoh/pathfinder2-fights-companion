@@ -1,0 +1,7 @@
+{
+  "name": "Pathfinder2 Fights Companion",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
