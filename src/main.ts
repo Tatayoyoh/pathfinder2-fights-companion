@@ -27,17 +27,45 @@ import '@ionic/vue/css/display.css';
  * https://ionicframework.com/docs/theming/dark-mode
  */
 
-/* @import '@ionic/vue/css/palettes/dark.always.css'; */
-/* @import '@ionic/vue/css/palettes/dark.class.css'; */
-import '@ionic/vue/css/palettes/dark.system.css';
+// import '@ionic/vue/css/palettes/dark.always.css';
+import '@ionic/vue/css/palettes/dark.class.css';
+// import '@ionic/vue/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
 
+/* Translation */
+import { createI18n } from 'vue-i18n'
+import { messages } from '@/locales/messages'
+export const i18n:any = createI18n({
+  legacy: false, // to use Vue3 composition API `<script setup>`
+  locale: window.navigator.language ? window.navigator.language:'en',
+  fallbackLocale: 'en',
+  inheritLocale: true,
+  globalInjection: true,
+  useScope: "local",
+  messages: messages
+});
+
+/* Pinia for storage */
+import { createPinia } from 'pinia';
+const pinia  = createPinia();
+
 const app = createApp(App)
   .use(IonicVue)
+  .use(i18n)
+  .use(pinia)
   .use(router);
+
+/* Import once all Ionic components into app */
+import * as IonComponents from '@ionic/vue';
+Object.keys(IonComponents).forEach(key => {
+  if (/^Ion[A-Z]\w+$/.test(key)) {
+    app.component(key, IonComponents[key]);
+  }
+});
 
 router.isReady().then(() => {
   app.mount('#app');
 });
+
