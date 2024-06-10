@@ -9,13 +9,13 @@
             </ion-button>
           </ion-item>
           <ion-card-content>
-            <ion-item v-for="heroe of heroesStore.heroes" lines="none">
-              <ion-label>{{heroe.name}}</ion-label>
+            <ion-item v-for="heroe, i of heroesStore.heroes" lines="none">
+              <InlineField slot="start" :document="heroe" fieldName="name" placeholder="Give a name here"></InlineField>
               <ion-buttons slot="end">
-                  <ion-button @click="presentAlert">
+                  <ion-button @click="removeHeroeAlert(i)">
                     <ion-icon slot="icon-only" :icon="close" color="danger"></ion-icon>
                   </ion-button>
-                </ion-buttons>
+              </ion-buttons>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -53,6 +53,7 @@
   
   <script setup lang="ts">
     import { ref, inject } from 'vue';
+    import InlineField from '@/components/InlineField.vue';
     import CreatureInfosModal from '@/components/CreatureInfosModal.vue'
     import CreatureSearchModal from '@/components/CreatureSearchModal.vue'
     import { HeroesStore } from '@/stores/HeroesStore'
@@ -67,7 +68,7 @@
 
     const language:any = inject('language');
   
-    async function presentAlert(index:number) {
+    async function removeHeroeAlert(index:number) {
       const alert = await alertController.create({
         header: 'Confirm heroe deletion',
         buttons: [
