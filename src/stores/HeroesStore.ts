@@ -12,7 +12,7 @@ export const HeroesStore = defineStore('heroes', {
 
         addHeroe(){
             let heroe = {
-              'name': 'test',
+              'name': '',
               'perception': 8,
               'conditions': []
             }
