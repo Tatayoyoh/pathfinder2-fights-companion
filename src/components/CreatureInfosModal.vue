@@ -2,13 +2,12 @@
     <ion-modal ref="creatureInfoModal" v-on:keyup.escape="dismiss" :can-dismiss="true">
         <ion-header>
             <ion-toolbar>
-                <ion-icon slot="start" color="secondary" size="large" :icon="informationCircleOutline" class="ion-margin-start"></ion-icon>
-                <ion-title>
-                    {{ $t('Creature informations') }}
-                </ion-title>
-                <ion-chip v-if="creature" color="secondary" slot="start">
-                    <ion-label>{{creature.name}}</ion-label>
+                <ion-chip v-if="creature" color="secondary" slot="start" size="large">
+                    <ion-label>PF2e SRD</ion-label>
                 </ion-chip>
+                <ion-title color="primary">
+                    {{translatedName()}}
+                </ion-title>
                 <ion-buttons slot="end">
                     <ion-button @click="dismiss" size="large">
                         <ion-icon slot="end" :icon="close"></ion-icon>
@@ -23,11 +22,12 @@
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue';
-    import { close, informationCircleOutline } from 'ionicons/icons';
+    import { inject, ref } from 'vue';
+    import { close } from 'ionicons/icons';
 
     const creatureInfoModal = ref();
     const creature:any = ref(null);
+    const language:any = inject('language');
 
     const emit = defineEmits<{
         (e: 'onDismiss'): void
@@ -46,6 +46,13 @@
     function dismiss(){
         creatureInfoModal.value.$el.dismiss();
         emit('onDismiss');
+    }
+
+    function translatedName(){
+        if(language.value == 'en')
+            return creature.value.name
+        else
+            return creature.value.translations[language.value].name
     }
 </script>
 
