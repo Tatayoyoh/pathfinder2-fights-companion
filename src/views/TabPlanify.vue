@@ -21,10 +21,27 @@
         </ion-card>
 
         <ion-card>
+          <ion-segment :scrollable="true" value="heart">
+            <ion-segment-button v-for="encounter of encounters" :value="encoutner">
+              {{ encounter }}
+            </ion-segment-button>
+            <ion-segment-button value="add" @click="encounters.push($t('Fight')+' '+(encounters.length+1))">
+              <ion-icon :icon="add"></ion-icon>
+            </ion-segment-button>
+          </ion-segment>
+          <ion-buttons slot="end">
+            <ion-button @click="">
+              <ion-icon name="add"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          
           <ion-item lines="none">
             <ion-card-title slot="start">{{$t('Oponents')}}</ion-card-title>
-            <ion-button @click="oponentsStore.addOponent" fill="outline" shape="round" slot="start">
+            <ion-button @click="creatureSearchModal.open()" fill="outline" shape="round" slot="start">
               {{$t('Add')}}
+            </ion-button>
+            <ion-button @click="" color="danger" fill="outline" shape="round" slot="end">
+              {{$t('Remove')}} {{$t('Fight')}}
             </ion-button>
           </ion-item>
           <ion-card-content>
@@ -46,7 +63,7 @@
           </ion-card-content>
         </ion-card>
 
-        <CreatureSearchModal ref="creatureSearchModal" :creatures="oponentsStore.creatures" :language="language"></CreatureSearchModal>
+        <CreatureSearchModal ref="creatureSearchModal" :creatures="oponentsStore.creatures" :language="language" @select="oponentsStore.addOponent($event)"></CreatureSearchModal>
       </ion-content>
     </ion-page>
   </template>
@@ -58,10 +75,11 @@
     import CreatureSearchModal from '@/components/CreatureSearchModal.vue'
     import { HeroesStore } from '@/stores/HeroesStore'
     import { OponentsStore } from '@/stores/OponentsStore'
-    import { close } from 'ionicons/icons';
+    import { add, close } from 'ionicons/icons';
     import { alertController } from '@ionic/vue';
 
     const creatureSearchModal = ref()
+    const encounters:any = ref([]);
 
     const heroesStore = HeroesStore();
     const oponentsStore = OponentsStore();
