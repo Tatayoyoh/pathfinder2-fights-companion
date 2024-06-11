@@ -1,15 +1,17 @@
 import { defineStore } from 'pinia';
+import { useStorage } from '@vueuse/core'
 
 export const OponentsStore = defineStore('oponents', {
     state: () => ({
         creatures: <Array<any>>[],
-        oponents: <Array<any>>[],
+        oponents: <any>[],
     }),
     actions: {
         init(){
             fetch('/creatures.json').then(async(res)=>{
                 this.creatures = await res.json()
             })
+            this.oponents = useStorage('oponents', [])
         },
 
         removeCondition(event:any, oponent:any, conditionId:string){
@@ -21,14 +23,18 @@ export const OponentsStore = defineStore('oponents', {
 
         addOponent(){
             let oponent = {
-              'name': '',
-              'creature': 'Goblin',
-              'hp': 20,
+              'name': undefined,
+              'creature': undefined,
+              'hp': undefined,
               'perception_rolled': undefined,
-              'perception': 8,
+              'perception': undefined,
               'conditions': []
             }
             this.oponents.push(oponent)
-          }
+        },
+
+        removeOponent(index:number){
+            this.oponents.splice(index, 1)
+        }
     }
 });

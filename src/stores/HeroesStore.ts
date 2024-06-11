@@ -1,16 +1,18 @@
 import { defineStore } from 'pinia';
+import { useStorage } from '@vueuse/core'
 
 export const HeroesStore = defineStore('heroes', {
     state: () => ({
-        heroes: <Array<any>>[],
+        heroes: <any>[],
     }),
     actions: {
         init(){
-            
+            this.heroes = useStorage('heroes', [])
         },
 
         addHeroe(){
             let heroe = {
+              'name': null,
               'player': null,
               'perception': null,
               'conditions': []
@@ -23,6 +25,10 @@ export const HeroesStore = defineStore('heroes', {
             heroe.conditions = heroe.conditions.filter(function(item:any) {
               return item !== conditionId
             });
+        },
+
+        removeHeroe(index:number){
+            this.heroes.splice(index, 1)
         }
     }
 });

@@ -8,11 +8,11 @@
           <ion-card-content>
             <ion-item v-for="heroe of heroesStore.heroes" lines="none">
               <ion-label>{{heroe.name}}</ion-label>
-              <ion-chip v-for="conditionId of heroe.conditions" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionNameById(conditionId))">
+              <ion-chip v-for="conditionId of heroe.conditions" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionsStore.conditionNameById(conditionId))">
                 <ion-icon :icon="close" @click="heroesStore.removeCondition($event, heroe, conditionId)"></ion-icon>
-                <ion-label>{{conditionNameById(conditionId)}}</ion-label>
+                <ion-label>{{conditionsStore.conditionNameById(conditionId)}}</ion-label>
               </ion-chip>
-              <ion-button @click="editConditionsPopup(heroe)">{{$t('Edit conditions')}}</ion-button>
+              <ion-button @click="conditionsStore.editConditionsPopup(heroe)">{{$t('Edit conditions')}}</ion-button>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -33,11 +33,11 @@
                   {{$t('Roll perceptions')}}
                 </ion-button>
                 <ion-label>{{oponent.hp}}</ion-label>
-                <ion-chip v-for="conditionId of oponent.conditions" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionNameById(conditionId))">
+                <ion-chip v-for="conditionId of oponent.conditions" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionsStore.conditionNameById(conditionId))">
                   <ion-icon :icon="close" @click="heroesStore.removeCondition($event, oponent, conditionId)"></ion-icon>
-                  <ion-label>{{conditionNameById(conditionId)}}</ion-label>
+                  <ion-label>{{conditionsStore.conditionNameById(conditionId)}}</ion-label>
                 </ion-chip>
-                <ion-button slot="end" @click="editConditionsPopup(oponent)">{{$t('Edit conditions')}}</ion-button>
+                <ion-button slot="end" @click="conditionsStore.editConditionsPopup(oponent)">{{$t('Edit conditions')}}</ion-button>
               </ion-item>
               
             </ion-list>
@@ -58,6 +58,7 @@
     import { close } from 'ionicons/icons';
     import { HeroesStore } from '@/stores/HeroesStore'
     import { OponentsStore } from '@/stores/OponentsStore'
+    import { ConditionsStore } from '@/stores/ConditionsStore';
   
     const oponents:any = ref([])
   
@@ -68,6 +69,7 @@
     // Stores
     const heroesStore = HeroesStore();
     const oponentsStore = OponentsStore();
+    const conditionsStore = ConditionsStore();
   
   
     function rollPerceptions(){
