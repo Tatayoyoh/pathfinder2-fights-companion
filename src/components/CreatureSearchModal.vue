@@ -12,48 +12,54 @@
                     </ion-button>
                 </ion-buttons>
             </ion-toolbar>
+            <ion-toolbar>
+                <ion-searchbar :placeholder="$t('Search a creature')" v-model="searchQuery" @ionInput="onSearchChange($event)" :debounce="200"></ion-searchbar>
+            </ion-toolbar>
         </ion-header>
         <ion-content>
-            <ion-toolbar>
-                <ion-searchbar :placeholder="$t('Search a creature')" @ionInput="onSearchChange($event)" :debounce="200"></ion-searchbar>
-            </ion-toolbar>
 
             <ion-progress-bar v-if="searching" type="indeterminate" color="primary"></ion-progress-bar>
-                    <ion-row>
-                        <ion-col size="4"><ion-label>{{$t('Name')}}</ion-label></ion-col>
-                        <ion-col size="4"><ion-label>{{$t('Level')}}</ion-label></ion-col>
-                        <ion-col size="4"><ion-label>{{$t('Link')}}</ion-label></ion-col>
-                    </ion-row button>
-                    <ion-row v-for="res of results" button @click="selectCreature(res)">
-                        <ion-col size="4">
-                            <ion-label v-if="(res.translations && res.translations.fr)">{{ res.translations.fr.name }}</ion-label>
-                            <ion-label v-else>{{ res.name }}</ion-label>
-                        </ion-col>
-                        <ion-col size="4">
-                            <ion-label>{{res.level}}</ion-label>
-                        </ion-col>
-                        <ion-col size="4">
-                            <ion-button @click="$event.stopPropagation();creatureInfoModal.open(res)" expand="block" fill="outline" shape="round">
-                                {{$t('More informations')}}
-                            </ion-button>
+            
+            <Vue3EasyDataTable :headers="headers" :items="results" @click-row="selectCreature" :hide-footer="true" :rows-per-page="200"
+                :sort-by="sortBy" :sort-type="sortType">
 
-                        </ion-col>
-                    </ion-row>
+                <template #item-name="creature">
+                    {{translatedName(creature)}}
+                </template>
+                <template #item-link="creature">
+                    <ion-button class="info-btn" @click="$event.stopPropagation();creatureInfoModal.open(creature)" expand="block" fill="outline" shape="round">
+                        {{$t('More informations')}}
+                    </ion-button>
+                </template>
+            </Vue3EasyDataTable>
+        
+            <CreatureInfosModal ref="creatureInfoModal"></CreatureInfosModal>
         </ion-content>
-        <CreatureInfosModal ref="creatureInfoModal"></CreatureInfosModal>
     </ion-modal>
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, Ref, inject } from 'vue';
     import { add, close } from 'ionicons/icons';
     import jsonata from 'jsonata'
+    import Vue3EasyDataTable from 'vue3-easy-data-table';
     import CreatureInfosModal from '@/components/CreatureInfosModal.vue'
+    import type { Header, Item, SortType } from "vue3-easy-data-table";
+
+    const headers: Header[] = [
+        { text: "Name", value: "name" },
+        { text: "Level", value: "level"},
+        { text: "Link", value: "link"},
+    ];
 
     const creaturSearchModal = ref();
     const creatureInfoModal = ref();
     const searching = ref(false)
-    const results:any = ref({})
+    const searchQuery = ref('')
+    const results:Ref<Item[]> = ref([])
+    const language:any = inject('language');
+    const sortBy = "name";
+    const sortType:SortType = "asc";
 
     const emit = defineEmits<{
         (e: 'dismiss'): void
@@ -83,7 +89,7 @@
         if(query.length <= 2) return
 
         let res = [];
-        if(props.language == 'fr'){
+        if(language.value == 'fr'){
         let frNameQuery = jsonata(`$[$contains(translations.fr.name.$lowercase(), "${query}")]`)
         res = await frNameQuery.evaluate(props.creatures);
         }
@@ -115,6 +121,13 @@
         emit('select', res);
         dismiss()
     }
+
+    function translatedName(creature:any){
+        if(language.value == 'en')
+            return creature.name
+        else
+            return creature.translations[language.value].name
+    }
 </script>
 
 <style scoped>
@@ -123,5 +136,13 @@ ion-modal {
     --max-height: 70%;
     --width: 70%;
     --max-width: 70%;
+}
+
+.vue3-easy-data-table tbody tr {
+    cursor: pointer !important;
+}
+
+.info-btn:hover {
+    --color: var(--ion-color-warning)
 }
 </style>

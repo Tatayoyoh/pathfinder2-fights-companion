@@ -7,9 +7,13 @@
 * Ionic
 * Vue3
 
-### tables
-https://vue3-lite-table.vercel.app/advance-examples.html
-https://hc200ok.github.io/vue3-easy-data-table-doc/features/theme-color.html
+### TODO
+
+* Creature search
+  * hover pointer cursor
+  * sort by header (with translation)
+* Oponents
+  * create a type Class 'Oponent' with native functions like : translateName, addCondition, damageHP, ...
 
 ## Targeted features
 
