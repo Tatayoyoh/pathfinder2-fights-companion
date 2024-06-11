@@ -11,8 +11,8 @@ export const HeroesStore = defineStore('heroes', {
 
         addHeroe(){
             let heroe = {
-              'name': 'test',
-              'perception': 8,
+              'player': null,
+              'perception': null,
               'conditions': []
             }
             this.heroes.push(heroe)
