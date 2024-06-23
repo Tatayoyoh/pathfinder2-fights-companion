@@ -7,7 +7,8 @@
           </ion-item>
           <ion-card-content>
             <ion-item v-for="heroe of heroesStore.heroes" lines="none">
-              <ion-label>{{heroe.name}}</ion-label>
+              <ion-label v-if="heroe.name">{{heroe.name}}</ion-label>
+              <ion-label v-else>{{$t('Unnamed heroe')}}</ion-label>
               <ion-chip v-for="conditionId of heroe.conditions" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionsStore.conditionNameById(conditionId))">
                 <ion-icon :icon="close" @click="heroesStore.removeCondition($event, heroe, conditionId)"></ion-icon>
                 <ion-label>{{conditionsStore.conditionNameById(conditionId)}}</ion-label>
@@ -32,6 +33,11 @@
                 <ion-button v-else @click="rollPerception(i)" fill="outline" shape="round">
                   {{$t('Roll perceptions')}}
                 </ion-button>
+                <ion-buttons v-if="oponent.perception_rolled">
+                  <ion-button @click="rollPerception(i)">
+                    <ion-icon slot="start" :icon="reload"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
                 <ion-label>{{oponent.hp}}</ion-label>
                 <ion-chip v-for="conditionId of oponent.conditions" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionsStore.conditionNameById(conditionId))">
                   <ion-icon :icon="close" @click="heroesStore.removeCondition($event, oponent, conditionId)"></ion-icon>
@@ -55,7 +61,7 @@
     import { ref, onMounted } from 'vue';
     import CreatureInfosModal from '@/components/CreatureInfosModal.vue'
     import ConditionInfosModal from '@/components/ConditionInfosModal.vue'
-    import { close } from 'ionicons/icons';
+    import { close, reload } from 'ionicons/icons';
     import { HeroesStore } from '@/stores/HeroesStore'
     import { OponentsStore } from '@/stores/OponentsStore'
     import { ConditionsStore } from '@/stores/ConditionsStore';
@@ -73,17 +79,22 @@
   
   
     function rollPerceptions(){
-      for(let i in oponents.value){
+      for(let i in oponentsStore.oponents){
         console.log(i)
-        oponents.value[i].perception_rolled = 10
+        oponentsStore.oponents[i].perception_rolled = getRandomInt()
       }
     }
   
     function rollPerception(oponentIndex:number){
-      oponents.value[oponentIndex].perception_rolled = 15;
+      oponentsStore.oponents[oponentIndex].perception_rolled = getRandomInt();
     }
   
-  
+    function getRandomInt() {
+      const minCeiled = Math.ceil(1);
+      const maxFloored = Math.floor(20);
+      return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+    }
+
   </script>
   
   <style scoped>
