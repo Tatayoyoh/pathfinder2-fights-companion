@@ -18,6 +18,8 @@
   * create a type Class 'Oponent' with native functions like : translateName, addCondition, damageHP, ...
 * Treasures
   * add items for fight treasures
+* iframe
+  * back navigation when following links into iframe
 
 ## Targeted features
 

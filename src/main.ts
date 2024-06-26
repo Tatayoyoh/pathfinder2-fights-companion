@@ -67,6 +67,10 @@ Object.keys(IonComponents).forEach(key => {
   }
 });
 
+// Popper
+import Popper from "vue3-popper";
+app.component("Popper", Popper);
+
 router.isReady().then(() => {
   app.mount('#app');
 });

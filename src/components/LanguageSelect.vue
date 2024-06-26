@@ -1,15 +1,15 @@
 <template>
     <ion-button id="language-popover" :slot="slot" shape="rounded" fill="outline">
         <ion-avatar class="small-icon ion-margin-end">
-            <img :src="'/countries/'+countryFromLocale(language)+'.png'" />
+            <img :src="'/countries/'+optionsStore.language+'.png'" />
         </ion-avatar>
-        <ion-label>{{$t(languageFromLocale(language))}}</ion-label>
+        <ion-label>{{$t(languageFromLocale(optionsStore.language))}}</ion-label>
         <ion-popover trigger="language-popover" :dismiss-on-select="true">
             <ion-content>
                 <ion-list>
-                    <ion-item v-for="c in countries" lines="none" button @click="emit('update:language', c.locales[0])">
+                    <ion-item v-for="c in countries" lines="none" button @click="optionsStore.language = c.locale; $i18n.locale=c.locale">
                         <ion-avatar>
-                            <img :src="'/countries/'+c.country+'.png'" />
+                            <img :src="'/countries/'+c.locale+'.png'" />
                         </ion-avatar>
                         <ion-label class="ion-margin">{{ $t(c.language)}}</ion-label>
                     </ion-item>
@@ -20,40 +20,48 @@
 </template>
 
 <script setup lang="ts">
+    import { useNavigatorLanguage } from '@vueuse/core'
+    import { watch, onMounted } from 'vue';
+    import { OptionsStore } from '@/stores/OptionsStore';
+    import { useI18n } from 'vue-i18n';
+    
     const countries = [
-        {'country':'france', 'language':'french', 'locales':['fr','fr-fr']},
-        {'country':'united-kingdom', 'language':'english', 'locales':['en']},
+        {'country':'France', 'language':'french', 'locale':'fr'},
+        {'country':'United-Kingdom', 'language':'english', 'locale':'en'},
     ]
 
-    const props = defineProps({
-        language: {
-            type: String,
-            required: true,
-            // TODO : default browser favortie lang, fallback : English
-        },
-        countryNames: {
-            type: Boolean,
-            default:true,
-        },
+    defineProps({
         slot: {
             type: String,
             default: ''
         },
     });
 
-    const emit = defineEmits(['update:language'])
+    const optionsStore = OptionsStore();
+    const i18n = useI18n({ useScope: 'global' });
 
+    onMounted(()=>{
+        const { language } = useNavigatorLanguage()
+        optionsStore.language = localeFromLocale(language.value);
+        i18n.locale.value = optionsStore.language;
 
-    function countryFromLocale(locale:string):string{
+        // auto change on browser website locale change
+        watch(language, () => {
+          optionsStore.language = localeFromLocale(language.value);
+          i18n.locale.value = optionsStore.language;
+        })
+    });
+
+    function languageFromLocale(locale:string):string{
         for(let c of countries){
-            if(c.locales?.includes(locale)) return c.country
+            if(c.locale?.includes(locale.toLowerCase())) return c.language
         }
         return '';
     }
 
-    function languageFromLocale(locale:string):string{
+    function localeFromLocale(locale:any):string{
         for(let c of countries){
-            if(c.locales?.includes(locale)) return c.language
+            if(c.locale?.includes(locale.toLowerCase())) return c.locale
         }
         return '';
     }

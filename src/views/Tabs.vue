@@ -4,7 +4,7 @@
       <ion-toolbar>
         <ion-title><ion-text color="warning">Pathfinder2e</ion-text> Fight Companion</ion-title>
         <DarkModeToggle slot="end" class="ion-margin"></DarkModeToggle>
-        <LanguageSelect slot="end" :language='language'></LanguageSelect>
+        <LanguageSelect slot="end"></LanguageSelect>
       </ion-toolbar>
     </ion-header>
 
@@ -32,19 +32,20 @@
   import { HeroesStore } from '@/stores/HeroesStore';
   import { OponentsStore } from '@/stores/OponentsStore';
   import { ConditionsStore } from '@/stores/ConditionsStore';
+  import { OptionsStore } from '@/stores/OptionsStore';
 
   const language = ref('fr') // 'en' or 'fr'
 
   const heroesStore = HeroesStore();
   const oponentsStore = OponentsStore();
   const conditionsStore = ConditionsStore();
-
-  provide('language', language)
+  const optionsStore = OptionsStore();
 
   onMounted(()=>{
     heroesStore.init();
     oponentsStore.init();
     conditionsStore.init(language.value);
+    optionsStore.init();
   });
 </script>
 
