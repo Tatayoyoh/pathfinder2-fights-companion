@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core'
 import { language } from 'ionicons/icons';
+import { v4 as uuid } from 'uuid';
 
 export const OponentsStore = defineStore('oponents', {
     state: () => ({
@@ -23,32 +24,30 @@ export const OponentsStore = defineStore('oponents', {
             });
         },
 
-        addOponent(oponentData:any=undefined){
-            let oponent = {
-                'name': undefined,
-                'creature': undefined,
-                'hp': undefined,
-                'perception_rolled': undefined,
-                'perception': undefined,
-                'conditions': [],
-                'data': {}
-            }
+        addOponent(oponentData:any, type='creature'){
             if(oponentData){
-                oponent = {
+                this.oponents.push({
+                    'id': uuid(),
                     'name': this.translatedName(oponentData),
+                    'type': type,
                     'creature': undefined,
                     'hp': oponentData.attributes.hp,
                     'perception_rolled': undefined,
                     'perception': oponentData.perception.mod,
                     'conditions': [],
                     'data': oponentData
-                }   
+                });
             }
-            this.oponents.push(oponent)
         },
 
-        removeOponent(index:number){
-            this.oponents.splice(index, 1)
+        removeOponent(id:number){
+            this.oponents = this.oponents.filter(function(oponent:any) {
+                return id === oponent.id
+            });
+        },
+
+        oponentById(id:string){
+            return this.oponents.find((oponent:any) => oponent.id == id);
         },
 
         translatedName(creature:any){

@@ -6,6 +6,8 @@
 
 * Ionic
 * Vue3
+* vue3-easy-data-table https://hc200ok.github.io/vue3-easy-data-table-doc/
+* vue3-popper https://valgeirb.github.io/vue3-popper/
 
 ### TODO
 
@@ -14,6 +16,8 @@
   * sort by header (with translation)
 * Oponents
   * create a type Class 'Oponent' with native functions like : translateName, addCondition, damageHP, ...
+* Treasures
+  * add items for fight treasures
 
 ## Targeted features
 

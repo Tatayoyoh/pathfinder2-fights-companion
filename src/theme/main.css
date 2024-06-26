@@ -1,44 +1,43 @@
+/*.vue3-easy-data-table*/
+.data-table {
+  --easy-table-border: 0px;
+  --easy-table-row-border: 0px;
 
-.vue3-easy-data-table {
-    --easy-table-border: 1px solid var(--ion-background-color);
-    --easy-table-row-border: 1px solid var(--ion-background-color);
-  
-    --easy-table-header-font-size: 14px;
-    --easy-table-header-height: 50px;
-    --easy-table-header-font-color: #c1cad4;
-    --easy-table-header-background-color: var(--ion-background-color);
-  
-    --easy-table-header-item-padding: 10px 15px;
-  
-    --easy-table-body-even-row-font-color: #fff;
-    --easy-table-body-even-row-background-color: #4c5d7a;
-  
-    --easy-table-body-row-font-color: #c0c7d2;
-    --easy-table-body-row-background-color: var(--ion-background-color);
-    --easy-table-body-row-height: 50px;
-    --easy-table-body-row-font-size: 14px;
-  
-    --easy-table-body-row-hover-font-color: var(--ion-text-color);
-    --easy-table-body-row-hover-background-color: var(--ion-toolbar-background);
-  
-    --easy-table-body-item-padding: 10px 15px;
-  
-    --easy-table-footer-background-color: var(--ion-background-color);
-    --easy-table-footer-font-color: #c0c7d2;
-    --easy-table-footer-font-size: 14px;
-    --easy-table-footer-padding: 0px 10px;
-    --easy-table-footer-height: 50px;
-  
-    --easy-table-rows-per-page-selector-width: 70px;
-    --easy-table-rows-per-page-selector-option-padding: 10px;
-    --easy-table-rows-per-page-selector-z-index: 1;
-  
-  
-    --easy-table-scrollbar-track-color: var(--ion-background-color);
-    --easy-table-scrollbar-color: var(--ion-background-color);
-    --easy-table-scrollbar-thumb-color: #4c5d7a;;
-    --easy-table-scrollbar-corner-color: var(--ion-background-color);
-  
-    --easy-table-loading-mask-background-color: var(--ion-background-color);
-  }
-  
+  --easy-table-header-font-size: 16px;
+  --easy-table-header-height: 15px;
+  --easy-table-header-font-color: var(--ion-color-dark-shade);
+  --easy-table-header-background-color: var(--ion-card-background);
+
+  --easy-table-header-item-padding: 1px 15px;
+
+  --easy-table-body-even-row-font-color: var(--ion-color-dark);
+  --easy-table-body-even-row-background-color: #4c5d7a;
+
+  --easy-table-body-row-font-color: var(--ion-color-dark);
+  --easy-table-body-row-background-color: var(--ion-card-background);
+  --easy-table-body-row-height: 15px;
+  --easy-table-body-row-font-size: 16px;
+
+  --easy-table-body-row-hover-font-color: var(--ion-color-dark);
+  --easy-table-body-row-hover-background-color: var(--ion-color-light);
+
+  --easy-table-body-item-padding: 1px 15px;
+
+  --easy-table-scrollbar-track-color: var(--ion-card-background);
+  --easy-table-scrollbar-color: var(--ion-card-background);
+  --easy-table-scrollbar-thumb-color: #4c5d7a;;
+  --easy-table-scrollbar-corner-color: var(--ion-card-background);
+
+  --easy-table-loading-mask-background-color: var(--ion-card-background);
+}
+
+:root{
+  --popper-theme-background-color: var(--ion-color-light);
+  --popper-theme-background-color-hover: var(--ion-color-light);
+  --popper-theme-text-color: var(--ion-color-dark);
+  --popper-theme-border-width: 0px;
+  --popper-theme-border-style: solid;
+  --popper-theme-border-radius: 16px;
+  --popper-theme-padding: 15px;
+  --popper-theme-box-shadow: 0 6px 30px -6px rgba(0, 0, 0, 0.25);
+}

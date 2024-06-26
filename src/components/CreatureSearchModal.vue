@@ -20,7 +20,7 @@
 
             <ion-progress-bar v-if="searching" type="indeterminate" color="primary"></ion-progress-bar>
             
-            <Vue3EasyDataTable :headers="headers" :items="results" @click-row="selectCreature" :hide-footer="true" :rows-per-page="200"
+            <Vue3EasyDataTable class="data-table" :headers="headers" :items="results" @click-row="selectCreature" :hide-footer="true" :rows-per-page="200"
                 :sort-by="sortBy" :sort-type="sortType">
 
                 <template #item-name="creature">

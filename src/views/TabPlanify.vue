@@ -45,11 +45,12 @@
           </ion-button>
         </ion-item>
         <ion-card-content>
-
-          <Vue3EasyDataTable class="oponents-table" :headers="headers" :items="oponentsStore.oponents" :hide-footer="true" :rows-per-page="200" :sort-by="sortBy" :sort-type="sortType">
+          <Vue3EasyDataTable class="data-table" :headers="headers" :items="oponentsStore.oponents" 
+          :hide-footer="true" :rows-per-page="200" :sort-by="sortBy" :sort-type="sortType"
+          @click-row="creatureInfoModal.open($event.data)">
               <template #item-remove="creature">
                 <ion-buttons class="remove-oponent" slot="end">
-                  <ion-button @click="oponentsStore.removeOponent(i)">
+                  <ion-button @click="$event.stopPropagation();oponentsStore.removeOponent(creature.id)">
                     <ion-icon slot="icon-only" :icon="close" color="danger"></ion-icon>
                   </ion-button>
               </ion-buttons>
@@ -59,6 +60,7 @@
       </ion-card>
 
       <CreatureSearchModal ref="creatureSearchModal" :creatures="oponentsStore.creatures" :language="language" @select="oponentsStore.addOponent($event)"></CreatureSearchModal>
+      <CreatureInfosModal ref="creatureInfoModal"></CreatureInfosModal>
     </ion-content>
   </ion-page>
 </template>
@@ -73,18 +75,19 @@
     import { OponentsStore } from '@/stores/OponentsStore'
     import { add, close } from 'ionicons/icons';
     import { alertController } from '@ionic/vue';
-    import type { Header, Item, SortType } from "vue3-easy-data-table";
+    import type { Header, SortType } from "vue3-easy-data-table";
 
     const headers: Header[] = [
-        { text: "Name", value: "name" },
-        { text: "Level", value: "data.level"},
-        { text: "HP", value: "hp"},
+        { text: "Name", value: "name", sortable: true },
+        { text: "Level", value: "data.level", sortable: true},
+        { text: "HP", value: "hp", sortable: true},
         { text: "", value: "remove", width: 50},
     ];
     const sortBy = "name";
     const sortType:SortType = "asc";
 
-    const creatureSearchModal = ref()
+    const creatureSearchModal = ref();
+    const creatureInfoModal = ref();
     const encounters:any = ref([]);
 
     const heroesStore = HeroesStore();
@@ -113,37 +116,6 @@
 </script>
   
 <style scoped>
-  .oponents-table {
-    --easy-table-border: 0px solid #445269;
-    --easy-table-row-border: 0px solid #445269;
-
-    --easy-table-header-font-size: 16px;
-    --easy-table-header-height: 15px;
-    --easy-table-header-font-color: #c1cad4;
-    --easy-table-header-background-color: var(--ion-card-background);
-
-    --easy-table-header-item-padding: 1px 15px;
-
-    --easy-table-body-even-row-font-color: #fff;
-    --easy-table-body-even-row-background-color: #4c5d7a;
-
-    --easy-table-body-row-font-color: #fff;
-    --easy-table-body-row-background-color: var(--ion-card-background);
-    --easy-table-body-row-height: 15px;
-    --easy-table-body-row-font-size: 16px;
-
-    --easy-table-body-row-hover-font-color: #fff;
-    --easy-table-body-row-hover-background-color: var(--ion-card-background);
-
-    --easy-table-body-item-padding: 1px 15px;
-
-    --easy-table-scrollbar-track-color: var(--ion-card-background);
-    --easy-table-scrollbar-color: var(--ion-card-background);
-    --easy-table-scrollbar-thumb-color: #4c5d7a;;
-    --easy-table-scrollbar-corner-color: var(--ion-card-background);
-
-    --easy-table-loading-mask-background-color: var(--ion-card-background);
-  }
 
 </style>
   
