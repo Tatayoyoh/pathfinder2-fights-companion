@@ -7,7 +7,7 @@
         <ion-popover trigger="language-popover" :dismiss-on-select="true">
             <ion-content>
                 <ion-list>
-                    <ion-item v-for="c in countries" lines="none" button @click="optionsStore.language = c.locale; $i18n.locale=c.locale">
+                    <ion-item v-for="c in countries" lines="none" button @click="optionsStore.language = c.locale">
                         <ion-avatar>
                             <img :src="'/countries/'+c.locale+'.png'" />
                         </ion-avatar>
@@ -41,11 +41,16 @@
     const i18n = useI18n({ useScope: 'global' });
 
     onMounted(()=>{
-        const { language } = useNavigatorLanguage()
-        optionsStore.language = localeFromLocale(language.value);
-        i18n.locale.value = optionsStore.language;
+        if(optionsStore.language){
+            i18n.locale.value = optionsStore.language;
+        }
+        
+        watch(optionsStore.language, () => {
+            i18n.locale.value = optionsStore.language;
+        })
 
         // auto change on browser website locale change
+        const { language } = useNavigatorLanguage();
         watch(language, () => {
           optionsStore.language = localeFromLocale(language.value);
           i18n.locale.value = optionsStore.language;
