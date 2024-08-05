@@ -75,6 +75,7 @@
   
         <CreatureInfosModal ref="creatureInfoModal"></CreatureInfosModal>
         <ConditionInfosModal ref="conditionInfoModal"></ConditionInfosModal>
+        <!-- <DiceTray></DiceTray> -->
       </ion-content>
     </ion-page>
   </template>
@@ -87,6 +88,7 @@
     import { HeroesStore } from '@/stores/HeroesStore'
     import { OponentsStore } from '@/stores/OponentsStore'
     import { ConditionsStore } from '@/stores/ConditionsStore';
+    import DiceTray from '@/components/DiceTray.vue';
     import Vue3EasyDataTable from 'vue3-easy-data-table';
     import type { Header, SortType } from "vue3-easy-data-table";
     import { OptionsStore } from '@/stores/OptionsStore';

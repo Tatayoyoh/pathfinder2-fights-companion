@@ -8,6 +8,11 @@
 * Vue3
 * vue3-easy-data-table https://hc200ok.github.io/vue3-easy-data-table-doc/
 * vue3-popper https://valgeirb.github.io/vue3-popper/
+* dice-box https://github.com/3d-dice/dice-box / https://fantasticdice.games/
+**OR**
+* dice-roller https://github.com/Matteas-Eden/dice-roller / https://matteas.nz/dice-roller/
+**OR**
+https://dddice.com
 
 ### TODO
 
@@ -20,6 +25,10 @@
   * add items for fight treasures
 * iframe
   * back navigation when following links into iframe
+* Dice roller
+  * https://fantasticdice.games/
+  * https://github.com/MajorVictory/3DDiceRoller > a lot of customizations !!
+  * https://github.com/Matteas-Eden/dice-roller > simple and elegant !
 
 ## Targeted features
 
