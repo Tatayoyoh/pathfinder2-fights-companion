@@ -45,6 +45,7 @@
     import Vue3EasyDataTable from 'vue3-easy-data-table';
     import CreatureInfosModal from '@/components/CreatureInfosModal.vue'
     import type { Header, Item, SortType } from "vue3-easy-data-table";
+    import { OptionsStore } from '@/stores/OptionsStore';
 
     const headers: Header[] = [
         { text: "Name", value: "name" },
@@ -52,12 +53,12 @@
         { text: "Link", value: "link"},
     ];
 
+    const optionsStore = OptionsStore();
     const creaturSearchModal = ref();
     const creatureInfoModal = ref();
     const searching = ref(false)
     const searchQuery = ref('')
     const results:Ref<Item[]> = ref([])
-    const language:any = inject('language');
     const sortBy = "name";
     const sortType:SortType = "asc";
 
@@ -76,10 +77,6 @@
             type: Object,
             required: true
         },
-        language: {
-            type: String,
-            required: true
-        },
     });
 
     async function onSearchChange(event:any){
@@ -89,7 +86,7 @@
         if(query.length <= 2) return
 
         let res = [];
-        if(language.value == 'fr'){
+        if(optionsStore.language == 'fr'){
         let frNameQuery = jsonata(`$[$contains(translations.fr.name.$lowercase(), "${query}")]`)
         res = await frNameQuery.evaluate(props.creatures);
         }
@@ -123,10 +120,10 @@
     }
 
     function translatedName(creature:any){
-        if(language.value == 'en')
+        if(optionsStore.language == 'en')
             return creature.name
         else
-            return creature.translations[language.value].name
+            return creature.translations[optionsStore.language].name
     }
 </script>
 

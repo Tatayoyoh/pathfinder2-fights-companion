@@ -17,10 +17,27 @@
             </ion-item>
           </ion-card-content>
         </ion-card>
-        
-        <ion-card>
+
+        <ion-row>
+          <ion-col size="4">
+            <ion-button v-if="fightsStore.currentFight > 1" @click="ionRouter.push(`/fight/${fightsStore.currentFight-1}/fight`)" expand="block" shape="round">
+              <ion-icon slot="icon-only" :icon="chevronBack"></ion-icon>
+              {{$t('Previous')}}
+            </ion-button>
+          </ion-col>
+          <ion-col size="4" class="ion-text-center">
+            <h1>{{fightsStore.current().name}}</h1>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button v-if="fightsStore.currentFight < fightsStore.fights[fightsStore.fights.length-1].id" @click="ionRouter.push(`/fight/${fightsStore.currentFight+1}/fight`)" expand="block" shape="round">
+              <ion-icon slot="icon-only" :icon="chevronForward"></ion-icon>
+              {{$t('Next')}}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-card v-if="fightsStore.currentFight">
           <ion-item lines="none">
-            <ion-card-title slot="start">{{$t('Fight')}}</ion-card-title>
             <ion-button class="perception-button" @click="rollPerceptions" fill="outline" shape="round" slot="start">
               {{$t('Roll perceptions')}}
               <ion-select v-model="optionsStore.perception_roll" class="" @click="$event.stopPropagation()">
@@ -28,10 +45,11 @@
                 <ion-select-option value="oponents">{{$t('Oponents only')}}</ion-select-option>
               </ion-select>
             </ion-button>
+            <ion-toggle slot="start" :enable-on-off-labels="true">{{ $t('Auto reorder') }}</ion-toggle>
           </ion-item>
           <ion-card-content>
 
-            <Vue3EasyDataTable class="data-table" :headers="headers" :items="oponentsStore.oponents" :hide-footer="true" :rows-per-page="200" :sort-by="sortBy" :sort-type="sortType">
+            <Vue3EasyDataTable class="data-table" :headers="headers" :items="fightsStore.oponents()" :hide-footer="true" :rows-per-page="200" :sort-by="sortBy" :sort-type="sortType">
               <template #item-type="oponent">
                 <ion-avatar v-if="oponent.type == 'creature'">
                   <ion-icon  src="/creature.svg" size="large" color="warning"></ion-icon>
@@ -41,20 +59,23 @@
                 </ion-avatar>
               </template>
               <template #item-perception_rolled="oponent">
-                <ion-text v-if="oponent.perception_rolled">{{oponent.perception_rolled}}</ion-text>
+                <span v-if="oponent.perception_rolled">
+                  <ion-text class="perception-rolled">{{oponent.perception_rolled}}</ion-text>
+                  <!-- <ion-buttons> -->
+                    <ion-button @click="rollPerception(oponent)" size="small" fill="outline">
+                      <img class="d20-button" src="/des-d20.png"></img>
+                    </ion-button>
+                  <!-- </ion-buttons> -->
+
+                </span>
                 <ion-button v-else @click="rollPerception(oponent)" fill="outline" shape="round">
                   {{$t('Roll perceptions')}}
                 </ion-button>
-                <ion-buttons v-if="oponent.perception_rolled">
-                  <ion-button @click="rollPerception(oponent)">
-                    <ion-icon slot="start" :icon="reload"></ion-icon>
-                  </ion-button>
-                </ion-buttons>
               </template>
               <template #item-conditions="oponent">
                   <Popper v-for="conditionId of oponent.conditions" hover arrow>
                     <ion-chip :id="conditionId" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionsStore.conditionNameById(conditionId))">
-                      <ion-icon :icon="close" @click="oponentsStore.removeCondition($event, oponentsStore.oponentById(oponent.id), conditionId)"></ion-icon>
+                      <ion-icon :icon="close" @click="fightsStore.removeCondition($event, fightsStore.oponentById(oponent.id), conditionId)"></ion-icon>
                       <ion-label>{{conditionsStore.conditionNameById(conditionId)}}</ion-label>
                     </ion-chip>
 
@@ -66,7 +87,7 @@
               </template>
 
               <template #item-editconditions="oponent">
-                <ion-button size="small" @click="conditionsStore.editConditionsPopup(oponentsStore.oponentById(oponent.id))">{{$t('Edit conditions')}}</ion-button>
+                <ion-button size="small" @click="conditionsStore.editConditionsPopup(fightsStore.oponentById(oponent.id))">{{$t('Edit conditions')}}</ion-button>
               </template>
             </Vue3EasyDataTable>
           </ion-card-content>
@@ -84,14 +105,17 @@
     import { ref } from 'vue';
     import CreatureInfosModal from '@/components/CreatureInfosModal.vue'
     import ConditionInfosModal from '@/components/ConditionInfosModal.vue'
-    import { close, personCircle, reload } from 'ionicons/icons';
+    import { chevronBack, chevronForward, close, personCircle, reload } from 'ionicons/icons';
     import { HeroesStore } from '@/stores/HeroesStore'
-    import { OponentsStore } from '@/stores/OponentsStore'
+    import { FightsStore } from '@/stores/FightsStore'
     import { ConditionsStore } from '@/stores/ConditionsStore';
     import DiceTray from '@/components/DiceTray.vue';
     import Vue3EasyDataTable from 'vue3-easy-data-table';
     import type { Header, SortType } from "vue3-easy-data-table";
     import { OptionsStore } from '@/stores/OptionsStore';
+    import { useIonRouter } from '@ionic/vue';
+
+    const ionRouter = useIonRouter();
   
     const headers: Header[] = [
         { text: "Type", value: "type", sortable: true, width:50 },
@@ -109,19 +133,19 @@
     
     // Stores
     const heroesStore = HeroesStore();
-    const oponentsStore = OponentsStore();
+    const fightsStore = FightsStore();
     const conditionsStore = ConditionsStore();
     const optionsStore = OptionsStore();
   
   
     function rollPerceptions(){
-      for(let oponent of oponentsStore.oponents){
+      for(let oponent of fightsStore.oponents()){
         oponent.perception_rolled = getRandomInt() + oponent.perception;
       }
     }
   
     function rollPerception(oponent:any){
-      oponentsStore.oponentById(oponent.id).perception_rolled = getRandomInt() + oponent.perception;
+      fightsStore.oponentById(oponent.id).perception_rolled = getRandomInt() + oponent.perception;
     }
   
     function getRandomInt() {
@@ -147,6 +171,12 @@
     border-left: 1px solid var(--ion-color-primary); 
     margin-left: 10px; 
     padding-left: 10px
+  }
+  .perception-rolled {
+    font-size: 30px;
+  }
+  .d20-button {
+    width: 40px;
   }
   </style>
   

@@ -24,10 +24,11 @@
 <script setup lang="ts">
     import { inject, ref } from 'vue';
     import { close } from 'ionicons/icons';
+    import { OptionsStore } from '@/stores/OptionsStore';
 
     const creatureInfoModal = ref();
     const creature:any = ref(null);
-    const language:any = inject('language');
+    const optionsStore = OptionsStore();
 
     const emit = defineEmits<{
         (e: 'onDismiss'): void
@@ -49,10 +50,10 @@
     }
 
     function translatedName(){
-        if(language.value == 'en')
+        if(optionsStore.language == 'en')
             return creature.value.name
         else
-            return creature.value.translations[language.value].name
+            return creature.value.translations[optionsStore.language].name
     }
 </script>
 
