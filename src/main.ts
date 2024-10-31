@@ -51,7 +51,11 @@ export const i18n:any = createI18n({
 
 /* Pinia for storage */
 import { createPinia } from 'pinia';
-const pinia  = createPinia();
+import { createORM } from 'pinia-orm'
+import piniaPluginPersistedState from "pinia-plugin-persistedstate"
+const pinia = createPinia()
+              .use(piniaPluginPersistedState)
+              .use(createORM())
 
 const app = createApp(App)
   .use(IonicVue)

@@ -14,7 +14,7 @@
       <ion-content>
         <ion-row>
             <ion-col size-md="6" offset-md="3" size-xs="12">
-                <ion-button @click="" expand="block" shape="round">
+                <ion-button href="/heroes" expand="block" shape="round">
             <ion-icon slot="start" :icon="create"></ion-icon>
             {{$t("Edit heroes")}}
         </ion-button>
@@ -35,7 +35,7 @@
         </ion-item>
 
         <ion-list>
-            <ion-item v-for="fight of fightsStore.fights" button @click="clickFight(fight.id)">
+            <ion-item v-for="fight in fightRepo.all()" button @click="clickFight(fight.id)">
                 <ion-text>{{fight.name}}</ion-text>
                 <ion-icon v-if="fight.ready" class="ion-margin-start" color="primary" size="small" :icon="checkmarkCircleOutline"></ion-icon>
 
@@ -88,6 +88,8 @@
     import { useI18n } from 'vue-i18n';
     import { useIonRouter } from '@ionic/vue';
     import draggable from 'vuedraggable'
+    import { useRepo } from 'pinia-orm'
+    import Fight from '@/models/fightModel'
 
     const i18n = useI18n();
     const ionRouter = useIonRouter();
@@ -101,7 +103,7 @@
     const openedGroup = ref();
     const selection = ref(false)
     const groupEdition:any = ref({});
-  
+    const fightRepo = useRepo(Fight);
     onMounted(()=>{
       optionsStore.init();
       heroesStore.init();
@@ -132,7 +134,7 @@
         text: i18n.t("OK"),
         role: 'confirm',
         handler: (data:any) => {
-          fightsStore.addFight(data[0])
+          fightRepo.save({ name: data[0] })
         },
       },
     ];

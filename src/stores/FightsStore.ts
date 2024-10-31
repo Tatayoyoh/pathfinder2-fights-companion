@@ -4,7 +4,7 @@ import { language } from 'ionicons/icons';
 import { v4 as uuid } from 'uuid';
 import { useRoute } from "vue-router";
 
-export const FightsStore = defineStore('fights', {
+export const FightsStore = defineStore('fightsStore', {
     state: () => ({
         creatures: <Array<any>>[],
         fights: <any>[],
