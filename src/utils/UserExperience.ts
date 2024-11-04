@@ -48,7 +48,7 @@ export function focusInput(inputRef:any){
     nextTick(() => {
         setTimeout(() => { // trick to focus with Ionic6
             inputRef.value.$el.setFocus();
-        }, 10);
+        }, 100);
     });
 }
 
