@@ -81,7 +81,6 @@
     import FightNameModal from '@/components/FightNameModal.vue';
     import HelpUs from '@/components/HelpUs.vue'
     import { HeroesStore } from '@/stores/HeroesStore';
-    import { FightsStore } from '@/stores/FightsStore';
     import { ConditionsStore } from '@/stores/ConditionsStore';
     import { OptionsStore } from '@/stores/OptionsStore';
     import { add, archive, create, ellipsisVertical, trash, copyOutline, documentTextOutline, createOutline, checkmarkCircleOutline } from 'ionicons/icons';
@@ -95,7 +94,6 @@
     const ionRouter = useIonRouter();
   
     const heroesStore = HeroesStore();
-    const fightsStore = FightsStore();
     const conditionsStore = ConditionsStore();
     const optionsStore = OptionsStore();
 
@@ -108,13 +106,12 @@
     onMounted(()=>{
       optionsStore.init();
       heroesStore.init();
-      fightsStore.init();
       conditionsStore.init(optionsStore.language);
     });
 
     function clickFight(fightId:number){
       if(!selection.value == true){
-        if(fightsStore.fight(fightId).ready){
+        if(fightRepo.find(fightId)?.ready){
           ionRouter.push(`/fight/${fightId}/fight`)  
         }
         else{

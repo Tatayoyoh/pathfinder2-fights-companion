@@ -20,6 +20,12 @@ export default class Fight extends Model {
         }
     }
 
+    removeOponent(oponentID:string){
+        this.oponents = this.oponents.filter(function(oponent:any) {
+            return oponentID === oponent.id
+        });
+    }
+
     declare id: string
     declare name: string
     declare description: string

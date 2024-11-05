@@ -17,9 +17,12 @@
         <ion-footer>
           <ion-toolbar class="ion-text-center">
             <ion-text color="primary">
-              <h1>{{fightsStore.current().name}}</h1>
+              <h1>{{fight.name}}</h1>
             </ion-text>
-            <ion-button v-if="fightsStore.current().ready" tab="planify" @click="toggleFight">
+            <ion-button @click="" color="danger" fill="outline" shape="round" slot="end">
+              {{$t('Remove')}} {{$t('Fight')}}
+            </ion-button>
+            <ion-button v-if="fight.ready" tab="planify" @click="toggleFight">
               <ion-icon aria-hidden="true" src="/planify.svg" />
               <ion-label>{{$t('Planify')}}</ion-label>
             </ion-button>
@@ -31,13 +34,13 @@
         </ion-footer>
         <!-- <ion-tab-bar slot="bottom">
           <ion-text color="primary">
-            <h1>{{fightsStore.current().name}}</h1>
+            <h1>{{fight.name}}</h1>
           </ion-text>
-          <ion-tab-button v-if="fightsStore.current().ready" tab="planify" :href="`/fight/${fightsStore.currentFight}/planify`">
+          <ion-tab-button v-if="fight.ready" tab="planify" :href="`/fight/${fight.id}/planify`">
             <ion-icon aria-hidden="true" src="/planify.svg" />
             <ion-label>{{$t('Planify')}}</ion-label>
           </ion-tab-button>
-          <ion-tab-button v-else tab="fight" :href="`/fight/${fightsStore.currentFight}/fight`">
+          <ion-tab-button v-else tab="fight" :href="`/fight/${fight.id}/fight`">
             <ion-icon aria-hidden="true" src="/swords.svg" />
             <ion-label>{{$t('Fight')}}</ion-label>
           </ion-tab-button>
@@ -55,39 +58,40 @@
   import DarkModeToggle from '@/components/DarkModeToggle.vue'
   import HelpUs from '@/components/HelpUs.vue'
   import { HeroesStore } from '@/stores/HeroesStore';
-  import { FightsStore } from '@/stores/FightsStore';
   import { ConditionsStore } from '@/stores/ConditionsStore';
   import { OptionsStore } from '@/stores/OptionsStore';
   import { useRoute } from "vue-router";
   import { useIonRouter } from '@ionic/vue';
+  import { useRepo } from 'pinia-orm';
+  import Fight from '@/models/fightModel';
 
   const route = useRoute();
   const router = useIonRouter();
 
   const heroesStore = HeroesStore();
-  const fightsStore = FightsStore();
   const conditionsStore = ConditionsStore();
   const optionsStore = OptionsStore();
+  
+  const fightID:any = route.params.id;
+  const fightRepo = useRepo(Fight);
+  const fight = fightRepo.find(fightID)
 
   onBeforeMount(()=>{
     if(!route.params.id) router.navigate('/')
     else{
       optionsStore.init();
       heroesStore.init();
-      fightsStore.init();
       conditionsStore.init(optionsStore.language);
-
-      fightsStore.setCurrent(route.params.id);
     }
   });
 
   function toggleFight(){
-    fightsStore.current().ready = ! fightsStore.current().ready
-    if(fightsStore.current().ready){
-      router.push(`/fight/${fightsStore.currentFight}/fight`);
+    fight.ready = ! fight.ready
+    if(fight.ready){
+      router.push(`/fight/${fight.id}/fight`);
     }
     else{
-      router.push(`/fight/${fightsStore.currentFight}/planify`);
+      router.push(`/fight/${fight.id}/planify`);
     }
   }
 </script>
