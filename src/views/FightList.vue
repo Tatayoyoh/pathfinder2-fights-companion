@@ -29,7 +29,7 @@
 
         <ion-item>
           <ion-title>{{$t('Your Fights')}}</ion-title>
-          <ion-button id="create-fight" @click="" fill="outline" shape="round">
+          <ion-button @click="fightNameModal.create()" fill="outline" shape="round">
             <ion-icon slot="start" :icon="add"></ion-icon>
             {{$t('Add')}}
           </ion-button>
@@ -52,13 +52,17 @@
                   </ion-button>
                 </ion-buttons>
 
-                <ion-popover :trigger="'fight-options-'+fight.id" trigger-action="click">
+                <ion-popover :trigger="'fight-options-'+fight.id" trigger-action="click" :dismiss-on-select="true">
                   <ion-content class="ion-padding">
+                    <ion-item button @click="fightNameModal.edit(fight.id)">
+                      <ion-icon :icon="createOutline" class="ion-margin-end"></ion-icon>
+                      <ion-label>{{$t('Edit name')}}</ion-label>
+                    </ion-item>
                     <ion-item button @click="">
                       <ion-icon :icon="archive" class="ion-margin-end"></ion-icon>
                       <ion-label>{{$t('Archive')}}</ion-label>
                     </ion-item>
-                    <ion-item button @click="">
+                    <ion-item button @click="removeFight(fight.id)">
                       <ion-icon :icon="trash" class="ion-margin-end" color="danger"></ion-icon>
                       <ion-label>{{$t('Delete')}}</ion-label>
                     </ion-item>
@@ -68,12 +72,7 @@
         </ion-list>            
     
 
-        <ion-alert
-          trigger="create-fight"
-          :header="$t('Add')"
-          :buttons="alertButtons"
-          :inputs="alertInputs"
-        ></ion-alert>
+        <FightNameModal ref="fightNameModal"></FightNameModal>
 
         <HelpUs trigger="more-info-modal"></HelpUs>
       </ion-content>
@@ -84,9 +83,9 @@
     import { onMounted, ref } from 'vue';
     import LanguageSelect from '@/components/LanguageSelect.vue'
     import DarkModeToggle from '@/components/DarkModeToggle.vue'
+    import FightNameModal from '@/components/FightNameModal.vue';
     import HelpUs from '@/components/HelpUs.vue'
     import { HeroesStore } from '@/stores/HeroesStore';
-    import { FightsStore } from '@/stores/FightsStore';
     import { ConditionsStore } from '@/stores/ConditionsStore';
     import { OptionsStore } from '@/stores/OptionsStore';
     import { add, archive, create, ellipsisVertical, trash, copyOutline, documentTextOutline, createOutline, checkmarkCircleOutline } from 'ionicons/icons';
@@ -100,25 +99,24 @@
     const ionRouter = useIonRouter();
   
     const heroesStore = HeroesStore();
-    const fightsStore = FightsStore();
     const conditionsStore = ConditionsStore();
     const optionsStore = OptionsStore();
 
     const accordionGroup = ref();
     const openedGroup = ref();
+    const fightNameModal = ref();
     const selection = ref(false)
     const groupEdition:any = ref({});
     const fightRepo = useRepo(Fight);
     onMounted(()=>{
       optionsStore.init();
       heroesStore.init();
-      fightsStore.init();
       conditionsStore.init(optionsStore.language);
     });
 
     function clickFight(fightId:number){
       if(!selection.value == true){
-        if(fightsStore.fight(fightId).ready){
+        if(fightRepo.find(fightId)?.ready){
           ionRouter.push(`/fight/${fightId}/fight`)  
         }
         else{
@@ -130,24 +128,9 @@
       }
     }
 
-    const alertButtons = [
-      {
-        text: i18n.t("Cancel"),
-        role: 'cancel',
-      },
-      {
-        text: i18n.t("OK"),
-        role: 'confirm',
-        handler: (data:any) => {
-          fightRepo.save({ name: data[0] })
-        },
-      },
-    ];
-    const alertInputs = [
-      {
-        placeholder: i18n.t("Name"),
-      },
-    ];
+    function removeFight(fightId:string){
+      fightRepo.destroy(fightId)
+    }
 </script>
   
 <style scoped>

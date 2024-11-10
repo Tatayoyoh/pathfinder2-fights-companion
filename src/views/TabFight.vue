@@ -20,23 +20,23 @@
 
         <ion-row>
           <ion-col size="4">
-            <ion-button v-if="fightsStore.currentFight > 1" @click="ionRouter.push(`/fight/${fightsStore.currentFight-1}/fight`)" expand="block" shape="round">
+            <ion-button v-if="fight" @click="ionRouter.push(`/fight/${fight.id-1}/fight`)" expand="block" shape="round">
               <ion-icon slot="icon-only" :icon="chevronBack"></ion-icon>
               {{$t('Previous')}}
             </ion-button>
           </ion-col>
           <ion-col size="4" class="ion-text-center">
-            <h1>{{fightsStore.current().name}}</h1>
+            <h1>{{fight.name}}</h1>
           </ion-col>
           <ion-col size="4">
-            <ion-button v-if="fightsStore.currentFight < fightsStore.fights[fightsStore.fights.length-1].id" @click="ionRouter.push(`/fight/${fightsStore.currentFight+1}/fight`)" expand="block" shape="round">
+            <ion-button v-if="fight.id < fightRepo.all().length-1" @click="ionRouter.push(`/fight/${fightRepo.id+1}/fight`)" expand="block" shape="round">
               <ion-icon slot="icon-only" :icon="chevronForward"></ion-icon>
               {{$t('Next')}}
             </ion-button>
           </ion-col>
         </ion-row>
 
-        <ion-card v-if="fightsStore.currentFight">
+        <ion-card v-if="fight">
           <ion-item lines="none">
             <ion-button class="perception-button" @click="rollPerceptions" fill="outline" shape="round" slot="start">
               {{$t('Roll perceptions')}}
@@ -49,7 +49,7 @@
           </ion-item>
           <ion-card-content>
 
-            <Vue3EasyDataTable class="data-table" :headers="headers" :items="fightsStore.oponents()" :hide-footer="true" :rows-per-page="200" :sort-by="sortBy" :sort-type="sortType">
+            <Vue3EasyDataTable class="data-table" :headers="headers" :items="fight.oponents" :hide-footer="true" :rows-per-page="200" :sort-by="sortBy" :sort-type="sortType">
               <template #item-type="oponent">
                 <ion-avatar v-if="oponent.type == 'creature'">
                   <ion-icon  src="/creature.svg" size="large" color="warning"></ion-icon>
@@ -75,7 +75,7 @@
               <template #item-conditions="oponent">
                   <Popper v-for="conditionId of oponent.conditions" hover arrow>
                     <ion-chip :id="conditionId" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionsStore.conditionNameById(conditionId))">
-                      <ion-icon :icon="close" @click="fightsStore.removeCondition($event, fightsStore.oponentById(oponent.id), conditionId)"></ion-icon>
+                      <ion-icon :icon="close" @click="fight.removeCondition($event, fight.oponentById(oponent.id), conditionId)"></ion-icon>
                       <ion-label>{{conditionsStore.conditionNameById(conditionId)}}</ion-label>
                     </ion-chip>
 
@@ -87,7 +87,7 @@
               </template>
 
               <template #item-editconditions="oponent">
-                <ion-button size="small" @click="conditionsStore.editConditionsPopup(fightsStore.oponentById(oponent.id))">{{$t('Edit conditions')}}</ion-button>
+                <ion-button size="small" @click="conditionsStore.editConditionsPopup(fight.oponentById(oponent.id))">{{$t('Edit conditions')}}</ion-button>
               </template>
             </Vue3EasyDataTable>
           </ion-card-content>
@@ -107,15 +107,18 @@
     import ConditionInfosModal from '@/components/ConditionInfosModal.vue'
     import { chevronBack, chevronForward, close, personCircle, reload } from 'ionicons/icons';
     import { HeroesStore } from '@/stores/HeroesStore'
-    import { FightsStore } from '@/stores/FightsStore'
     import { ConditionsStore } from '@/stores/ConditionsStore';
     import DiceTray from '@/components/DiceTray.vue';
     import Vue3EasyDataTable from 'vue3-easy-data-table';
     import type { Header, SortType } from "vue3-easy-data-table";
     import { OptionsStore } from '@/stores/OptionsStore';
     import { useIonRouter } from '@ionic/vue';
+    import { useRepo } from 'pinia-orm';
+    import Fight from '@/models/fightModel';
+    import { useRoute } from 'vue-router';
 
     const ionRouter = useIonRouter();
+    const route = useRoute();
   
     const headers: Header[] = [
         { text: "Type", value: "type", sortable: true, width:50 },
@@ -132,20 +135,22 @@
     
     
     // Stores
+    const fightRepo = useRepo(Fight);
+    const fightID:any = route.params.id;
+    const fight = fightRepo.find(fightID)
     const heroesStore = HeroesStore();
-    const fightsStore = FightsStore();
     const conditionsStore = ConditionsStore();
     const optionsStore = OptionsStore();
   
   
     function rollPerceptions(){
-      for(let oponent of fightsStore.oponents()){
+      for(let oponent of fight.oponents){
         oponent.perception_rolled = getRandomInt() + oponent.perception;
       }
     }
   
     function rollPerception(oponent:any){
-      fightsStore.oponentById(oponent.id).perception_rolled = getRandomInt() + oponent.perception;
+      fight.oponentById(oponent.id).perception_rolled = getRandomInt() + oponent.perception;
     }
   
     function getRandomInt() {
