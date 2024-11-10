@@ -1,15 +1,6 @@
 <template>
     <ion-page>
-      <ion-header :translucent="true">
-        <ion-toolbar>
-          <ion-title><ion-text color="warning">Pathfinder2e</ion-text> Fight Companion</ion-title>
-          <ion-button id="more-info-modal" slot="end" expand="block" fill="clear">
-            {{$t("More informations")}}
-          </ion-button>
-          <DarkModeToggle slot="end" class="ion-margin"></DarkModeToggle>
-          <LanguageSelect slot="end"></LanguageSelect>
-        </ion-toolbar>
-      </ion-header>
+      <HeaderToolbar></HeaderToolbar>
   
       <ion-content>
         <ion-item button href="/heroes">
@@ -73,18 +64,14 @@
     
 
         <FightNameModal ref="fightNameModal"></FightNameModal>
-
-        <HelpUs trigger="more-info-modal"></HelpUs>
       </ion-content>
     </ion-page>
 </template>
   
 <script setup lang="ts">
     import { onMounted, ref } from 'vue';
-    import LanguageSelect from '@/components/LanguageSelect.vue'
-    import DarkModeToggle from '@/components/DarkModeToggle.vue'
     import FightNameModal from '@/components/FightNameModal.vue';
-    import HelpUs from '@/components/HelpUs.vue'
+    import HeaderToolbar from '@/components/HeaderToolbar.vue';
     import { HeroesStore } from '@/stores/HeroesStore';
     import { ConditionsStore } from '@/stores/ConditionsStore';
     import { OptionsStore } from '@/stores/OptionsStore';
@@ -134,28 +121,5 @@
 </script>
   
 <style scoped>
-  @font-face {
-      font-family: heroes;
-      src: url('/Heroes.ttf'); /* from https://www.dafont.com/fr/heroes-2.font */
-  }
-  
-  ion-title {
-    font-family: heroes;
-    font-size: 50px;
-  }
-  
-  ion-router-outlet{
-    margin-top: 80px;
-  }
-  
-  ion-icon{
-    font-size: 2em;
-  }
-  ion-tab-button ion-label {
-    font-size: 2em;
-  }
-  ion-tab-bar{
-    height: 130px;
-  }
 </style>
   
