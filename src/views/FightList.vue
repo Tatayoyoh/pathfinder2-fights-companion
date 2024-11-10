@@ -12,18 +12,23 @@
       </ion-header>
   
       <ion-content>
-        <ion-row>
-            <ion-col size-md="6" offset-md="3" size-xs="12">
-                <ion-button href="/heroes" expand="block" shape="round">
+        <ion-item button href="/heroes">
+          <ion-text slot="start">
+            <ion-title>{{$t('Heroes')}}</ion-title>
+          </ion-text>
+          <ion-button slot="end" href="/heroes" expand="block" size="medium" fill="outline">
             <ion-icon slot="start" :icon="create"></ion-icon>
             {{$t("Edit heroes")}}
         </ion-button>
+        </ion-item>
+        <ion-row>
+            <ion-col size-md="6" offset-md="3" size-xs="12">
             </ion-col>
 
         </ion-row>
 
         <ion-item>
-          <ion-title>Your Fights</ion-title>
+          <ion-title>{{$t('Your Fights')}}</ion-title>
           <ion-button id="create-fight" @click="" fill="outline" shape="round">
             <ion-icon slot="start" :icon="add"></ion-icon>
             {{$t('Add')}}
