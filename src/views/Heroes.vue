@@ -1,46 +1,41 @@
 <template>
     <ion-page>
+      <HeaderToolbar></HeaderToolbar>
       <ion-header :translucent="true">
-        <ion-toolbar>
-          <ion-title><ion-text color="warning">{{$t("Heroes")}}</ion-text></ion-title>
-        
-        </ion-toolbar>
       </ion-header>
+      <ion-item lines="none" color="none">
+        <ion-button @click="router.back()" color="dark" expand="block" fill="clear" shape="round" class="ion-float-start" size="normal">
+          <ion-icon slot="start" :icon="chevronBackCircle"></ion-icon>
+            {{$t('Back')}}
+          </ion-button>
+          <ion-text color="warning" class="ion-text-center"><ion-title>{{$t("Heroes")}}</ion-title></ion-text>
+        </ion-item>
+        
+      <ion-row class="ion-margin-top">
+        <ion-col size="12">
+          <ion-button @click="heroeRepo.new()" fill="outline" size="medium" expand="block">
+            <ion-icon slot="start" :icon="add"></ion-icon>
+            {{$t('Add new')}}
+          </ion-button>
+        </ion-col>
+      </ion-row>
   
       <ion-content>
-        <ion-row>
-            <ion-col size-md="6" offset-md="3" size-xs="12">
-                <ion-button @click="" expand="block" shape="round">
-            <ion-icon slot="start" :icon="create"></ion-icon>
-            {{$t("Edit heroes")}}
-        </ion-button>
-            </ion-col>
-
-        </ion-row>
-
-        <ion-item>
-        <ion-title>Your Fights</ion-title>
-        <ion-button @click="" fill="outline" shape="round">
-            <ion-icon slot="start" :icon="add"></ion-icon>
-            {{$t('Add')}}
-          </ion-button>
-        </ion-item>
-
-        <ion-list>
-            <ion-item>
-                <ion-label>Crypt</ion-label>
-                <ion-button slot="end" shape="round">
-                    {{$t("Edit")}}
-                    <ion-icon aria-hidden="true" src="/planify.svg" />
-
-                </ion-button>
-                <ion-button slot="end" shape="round">
-                    {{$t("Fight")}}
-                    <ion-icon aria-hidden="true" src="/swords.svg" />
-                </ion-button>
+        <ion-card>
+          <ion-card-content>
+            <ion-item v-for="heroe of heroeRepo.all()" lines="none">
+              <InlineField slot="start" :repo="heroeRepo" :document="heroe" fieldName="name" placeholder="Give a name here"></InlineField>
+              <ion-buttons slot="end">
+                  <ion-button @click="removeHeroeAlert(heroe)">
+                    <ion-icon slot="icon-only" :icon="close" color="danger"></ion-icon>
+                  </ion-button>
+              </ion-buttons>
             </ion-item>
-        </ion-list>            
-          </ion-content>
+          </ion-card-content>
+        </ion-card>
+
+      
+      </ion-content>
     </ion-page>
   </template>
   
@@ -49,18 +44,42 @@
     import { HeroesStore } from '@/stores/HeroesStore';
     import { ConditionsStore } from '@/stores/ConditionsStore';
     import { OptionsStore } from '@/stores/OptionsStore';
-    import { add, create } from 'ionicons/icons';
+    import { add, chevronBackCircle, close, create } from 'ionicons/icons';
+    import HeaderToolbar from '@/components/HeaderToolbar.vue';
+    import { useI18n } from 'vue-i18n';
+    import { useRepo } from 'pinia-orm';
+    import Heroe from '@/models/heroeModel';
+    import { alertController } from '@ionic/vue';
+    import InlineField from '@/components/InlineField.vue';
+    import { useRouter } from 'vue-router';
 
-  
-    const heroesStore = HeroesStore();
-    const conditionsStore = ConditionsStore();
-    const optionsStore = OptionsStore();
-  
+    const i18n = useI18n();
+    const router = useRouter();
+
+    const heroeRepo = useRepo(Heroe);
+
     onMounted(()=>{
-      optionsStore.init();
-      heroesStore.init();
-      conditionsStore.init(optionsStore.language);
+      
     });
+
+    async function removeHeroeAlert(heroe:Heroe) {
+      const alert = await alertController.create({
+        header: i18n.t('Confirm heroe deletion'),
+        buttons: [
+          {
+            text: i18n.t('Cancel'), role: 'cancel',
+          },
+          {
+            text: i18n.t('OK'), role: 'confirm', handler: () => {
+              heroeRepo.destroy(heroe.id);
+            },
+          },
+        ],
+      });
+
+      await alert.present();
+    };
+
   </script>
   
   <style scoped>

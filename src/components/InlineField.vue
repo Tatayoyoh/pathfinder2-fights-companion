@@ -33,6 +33,10 @@
     const fieldLength = ref("20ch")
 
     const props = defineProps({
+        repo: {
+            type: Object,
+            required: true,
+        },
         document: {
             type: Object,
             required: true,
@@ -68,7 +72,9 @@
             return
         }
 
-        props.document[props.fieldName] = fieldvalue.value;
+        props.document[props.fieldName] = fieldvalue.value
+        props.repo.save(props.document)
+        
         emit('onUpdated', fieldvalue.value)
         fieldEdition.value = false;
         calculateFieldSize();

@@ -1,25 +1,7 @@
 <template>
   <ion-page> 
     <ion-content :fullscreen="true">
-      <ion-card>
-        <ion-item lines="none">
-          <ion-card-title slot="start">{{$t('Heroes')}}</ion-card-title>
-          <ion-button @click="heroesStore.addHeroe" fill="outline" shape="round" slot="start">
-            <ion-icon slot="start" :icon="add"></ion-icon>
-            {{$t('Add')}}
-          </ion-button>
-        </ion-item>
-        <ion-card-content>
-          <ion-item v-for="heroe, i of heroesStore.heroes" lines="none">
-            <InlineField slot="start" :document="heroe" fieldName="name" placeholder="Give a name here"></InlineField>
-            <ion-buttons slot="end">
-                <ion-button @click="removeHeroeAlert(i)">
-                  <ion-icon slot="icon-only" :icon="close" color="danger"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-          </ion-item>
-        </ion-card-content>
-      </ion-card>
+
 
       <ion-card>
         <ion-item lines="none">
@@ -82,27 +64,8 @@
     const creatureSearchModal = ref();
     const creatureInfoModal = ref();
 
-    const heroesStore = HeroesStore();
     const fightRepo = useRepo(Fight);
     const fight = fightRepo.find(fightID)
-
-    async function removeHeroeAlert(index:number) {
-      const alert = await alertController.create({
-        header: 'Confirm heroe deletion',
-        buttons: [
-          {
-            text: i18n.t('Cancel'), role: 'cancel',
-          },
-          {
-            text: 'OK', role: 'confirm', handler: () => {
-              heroesStore.removeHeroe(index);
-            },
-          },
-        ],
-      });
-
-      await alert.present();
-    };
 
 </script>
   
