@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { alertController } from '@ionic/vue';
 
-export const ConditionsStore = defineStore('conditions', {
+export const ConditionsStore = defineStore('conditionsStore', {
     state: () => ({
         conditions: <Array<any>>[],
         language: <string>'en',

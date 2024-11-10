@@ -26,8 +26,9 @@
         </ion-card-content>
       </ion-card>
 
-      <CreatureSearchModal ref="creatureSearchModal" :creatures="fight.creatures" @select="fight.addOponent($event)"></CreatureSearchModal>
+      <CreatureSearchModal ref="creatureSearchModal" :creatures="creatureRepo.all()" @select="fight.addOponent($event)"></CreatureSearchModal>
       <CreatureInfosModal ref="creatureInfoModal"></CreatureInfosModal>
+      <RepoDataInit></RepoDataInit>
     </ion-content>
   </ion-page>
 </template>
@@ -46,6 +47,8 @@
     import { useRepo } from 'pinia-orm';
     import Fight from '@/models/fightModel';
     import { useRoute } from 'vue-router';
+    import RepoDataInit from '@/components/RepoDataInit.vue';
+    import Creature from '@/models/creatureModel';
 
     const i18n = useI18n();
 
@@ -67,6 +70,7 @@
     const fightRepo = useRepo(Fight);
     const fight = fightRepo.find(fightID)
 
+    const creatureRepo = useRepo(Creature)
 </script>
   
 <style scoped>

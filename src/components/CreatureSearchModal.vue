@@ -74,7 +74,7 @@
     
     const props = defineProps({
         creatures: {
-            type: Object,
+            type: Array,
             required: true
         },
     });
@@ -87,12 +87,12 @@
 
         let res = [];
         if(optionsStore.language == 'fr'){
-        let frNameQuery = jsonata(`$[$contains(translations.fr.name.$lowercase(), "${query}")]`)
-        res = await frNameQuery.evaluate(props.creatures);
+            let frNameQuery = jsonata(`$[$contains(translations.fr.name.$lowercase(), "${query}")]`)
+            res = await frNameQuery.evaluate(props.creatures);
         }
         else{
-        let enNameQuery = jsonata(`$[$contains(name.$lowercase(), "${query}")]`)
-        res = await enNameQuery.evaluate(props.creatures);
+            let enNameQuery = jsonata(`$[$contains(name.$lowercase(), "${query}")]`)
+            res = await enNameQuery.evaluate(props.creatures);
         }
 
         if(res == undefined){

@@ -64,6 +64,8 @@
     
 
         <FightNameModal ref="fightNameModal"></FightNameModal>
+
+        <RepoDataInit></RepoDataInit>
       </ion-content>
     </ion-page>
 </template>
@@ -72,6 +74,7 @@
     import { onMounted, ref } from 'vue';
     import FightNameModal from '@/components/FightNameModal.vue';
     import HeaderToolbar from '@/components/HeaderToolbar.vue';
+    import RepoDataInit from '@/components/RepoDataInit.vue';
     import { HeroesStore } from '@/stores/HeroesStore';
     import { ConditionsStore } from '@/stores/ConditionsStore';
     import { OptionsStore } from '@/stores/OptionsStore';
