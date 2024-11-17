@@ -58,10 +58,6 @@
 
     const heroeRepo = useRepo(Heroe);
 
-    onMounted(()=>{
-      
-    });
-
     async function removeHeroeAlert(heroe:Heroe) {
       const alert = await alertController.create({
         header: i18n.t('Confirm heroe deletion'),

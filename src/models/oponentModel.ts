@@ -17,7 +17,7 @@ export default class Oponent extends Model {
 
             // relationship
             fightId: this.attr(null).notNullable(),
-            fight: this.belongsTo(Fight, 'fightId'),
+            fight: this.belongsTo(Fight, 'fightId').onDelete('set null'),
         }
     }
 

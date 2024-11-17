@@ -1,4 +1,4 @@
-import { Model } from 'pinia-orm'
+import { Model, useRepo } from 'pinia-orm'
 import Oponent from './oponentModel'
 import Treasure from './treasureModel'
 
@@ -15,15 +15,9 @@ export default class Fight extends Model {
             description: this.string(''),
             group: this.string(''),
             ready: this.boolean(false),
-            oponents: this.hasMany(Oponent, 'fightId'),
-            treasures: this.hasMany(Treasure, 'fightId')
+            oponents: this.hasMany(Oponent, 'fightId').onDelete('cascade'),
+            treasures: this.hasMany(Treasure, 'fightId').onDelete('cascade')
         }
-    }
-
-    removeOponent(oponentID:string){
-        this.oponents = this.oponents.filter(function(oponent:any) {
-            return oponentID === oponent.id
-        });
     }
 
     declare id: string

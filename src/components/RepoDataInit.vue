@@ -4,25 +4,30 @@
 
 <script setup lang="ts">
     import Condition from '@/models/conditionModel';
-    import Creature from '@/models/creatureModel';
     import { OptionsStore } from '@/stores/OptionsStore';
     import { useRepo } from 'pinia-orm';
     import { onMounted } from 'vue';
+    import { CreaturesStore } from '@/stores/creaturesStore';
+    import { TreasuresStore } from '@/stores/TreasuresStore';
 
     const optionsStore = OptionsStore();
+    const creaturesStore = CreaturesStore();
+    const treasuresStore = TreasuresStore();
     const conditionRepo = useRepo(Condition);
-    const creatureRepo = useRepo(Creature)
 
     onMounted(()=>{
         if(!conditionRepo.all().length){
-            conditionsInit(optionsStore.language)
+            conditionsInit()
         }
-        if(!creatureRepo.all().length){
-            creatureInit(optionsStore.language)
+        if(!creaturesStore.creatures.length){
+            creatureInit()
+        }
+        if(!treasuresStore.treasures.length){
+            treasureInit()
         }
     });
 
-    function conditionsInit(language:string){
+    function conditionsInit(){
         fetch('/conditions.json').then(async(res)=>{
             let conditions = await res.json()
             for(let condition of conditions){
@@ -31,12 +36,11 @@
         })
     }
 
-    function creatureInit(language:string){
-        fetch('/creatures.json').then(async(res)=>{
-            let creatures = await res.json()
-            for(let creature of creatures){
-                creatureRepo.save(creature)
-            }
-        })
+    function creatureInit(){
+        creaturesStore.init(optionsStore.language)
+    }
+
+    function treasureInit(){
+        treasuresStore.init(optionsStore.language)
     }
 </script>

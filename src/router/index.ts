@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import Tabs from '@/views/Tabs.vue';
-import TabFight from '@/views/TabFight.vue';
-import TabPlanify from '@/views/TabPlanify.vue';
+import Fight from '@/views/Fight.vue';
+import Planify from '@/views/Planify.vue';
 import FightList from '@/views/FightList.vue';
 import Heroes from '@/views/Heroes.vue';
 
@@ -17,22 +16,11 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/fight/:id',
-    component: Tabs,
-
-    children: [
-      {
-        path: '',
-        redirect: 'fight'
-      },
-      {
-        path: 'fight',
-        component: TabFight
-      },
-      {
-        path: 'planify',
-        component: TabPlanify
-      }
-    ]
+    component: Fight,
+  },
+  {
+    path: '/planify/:id',
+    component: Planify,
   }
 ]
 

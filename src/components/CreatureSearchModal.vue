@@ -13,7 +13,7 @@
                 </ion-buttons>
             </ion-toolbar>
             <ion-toolbar>
-                <ion-searchbar :placeholder="$t('Search a creature')" v-model="searchQuery" @ionInput="onSearchChange($event)" :debounce="200"></ion-searchbar>
+                <ion-searchbar :placeholder="$t('Search a creature')" v-model="searchQuery" @ionInput="onSearchChange($event)" :debounce="400"></ion-searchbar>
             </ion-toolbar>
         </ion-header>
         <ion-content>

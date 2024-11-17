@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useStorage } from '@vueuse/core'
 
-export const HeroesStore = defineStore('heroes', {
+export const HeroesStore = defineStore('heroesStore', {
     state: () => ({
         heroes: <any>[],
     }),

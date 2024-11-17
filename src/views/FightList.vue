@@ -107,10 +107,10 @@
     function clickFight(fightId:number){
       if(!selection.value == true){
         if(fightRepo.find(fightId)?.ready){
-          ionRouter.push(`/fight/${fightId}/fight`)  
+          ionRouter.push(`/fight/${fightId}`)  
         }
         else{
-          ionRouter.push(`/fight/${fightId}/planify`)
+          ionRouter.push(`/planify/${fightId}`)
         }
       }
       else{
