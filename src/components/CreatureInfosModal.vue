@@ -61,7 +61,7 @@
 ion-modal {
     --height: 70%;
     --max-height: 70%;
-    --width: 70%;
-    --max-width: 70%;
+    --width: 800px;
+    --max-width: 800px;
 }
 </style>

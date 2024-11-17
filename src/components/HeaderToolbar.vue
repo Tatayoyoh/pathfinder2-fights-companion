@@ -2,7 +2,7 @@
 <template>
     <ion-header :translucent="true">
         <ion-toolbar>
-          <ion-title><ion-text color="warning">Pathfinder2e</ion-text> Fight Companion</ion-title>
+          <ion-title class="main-title"><ion-text color="warning">Pathfinder2e</ion-text> Fight Companion</ion-title>
           <ion-button id="more-info-modal" slot="end" expand="block" fill="clear">
             {{$t("More informations")}}
           </ion-button>

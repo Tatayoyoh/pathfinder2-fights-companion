@@ -1,39 +1,35 @@
 <template>
     <ion-page>
-      <HeaderToolbar></HeaderToolbar>
-  
       <ion-content>
-        <ion-item button href="/heroes">
-          <ion-text slot="start">
+        <ion-item button router-link="/heroes">
+          <ion-text>
             <ion-title>{{$t('Heroes')}}</ion-title>
           </ion-text>
-          <ion-button slot="end" href="/heroes" expand="block" size="medium" fill="outline">
+          <ion-button slot="end" router-link="/heroes" expand="block" size="medium" fill="outline">
             <ion-icon slot="start" :icon="create"></ion-icon>
             {{$t("Edit heroes")}}
         </ion-button>
         </ion-item>
-        <ion-row>
-            <ion-col size-md="6" offset-md="3" size-xs="12">
-            </ion-col>
 
-        </ion-row>
-
-        <ion-item>
+        <ion-item class="ion-margin-top">
           <ion-title>{{$t('Your Fights')}}</ion-title>
           <ion-button @click="fightNameModal.create()" fill="outline" shape="round">
             <ion-icon slot="start" :icon="add"></ion-icon>
             {{$t('Add')}}
           </ion-button>
-          <ion-button @click="selection=!selection" :fill="selection ? 'solid':'outline'" shape="round">
+          <!-- <ion-button @click="selection=!selection" :fill="selection ? 'solid':'outline'" shape="round">
             <ion-icon slot="start" :icon="copyOutline"></ion-icon>
             {{$t('Group')}}
-          </ion-button>
+          </ion-button> -->
         </ion-item>
 
         <ion-list>
             <ion-item v-for="fight in fightRepo.all()" button @click="clickFight(fight.id)">
                 <ion-text>{{fight.name}}</ion-text>
-                <ion-icon v-if="fight.ready" class="ion-margin-start" color="primary" size="small" :icon="checkmarkCircleOutline"></ion-icon>
+                <ion-chip v-if="fight.ready" color="success" mode="ios" outline="true" class="ion-margin-start">
+                  <ion-icon color="success" size="small" :icon="checkmarkCircleOutline"></ion-icon>
+                  <ion-label>{{$t('ready')}}</ion-label>
+                </ion-chip>
 
                 <ion-checkbox v-if="selection" justify="end"></ion-checkbox>
 

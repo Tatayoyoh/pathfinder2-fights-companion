@@ -1,15 +1,14 @@
 <template>
     <ion-page>
-      <HeaderToolbar></HeaderToolbar>
       <ion-header :translucent="true">
       </ion-header>
       <ion-item lines="none" color="none">
-        <ion-button @click="router.back()" color="dark" expand="block" fill="clear" shape="round" class="ion-float-start" size="normal">
+        <ion-button router-link="/" color="dark" expand="block" fill="clear" shape="round" class="ion-float-start" size="normal">
           <ion-icon slot="start" :icon="chevronBackCircle"></ion-icon>
             {{$t('Back')}}
-          </ion-button>
-          <ion-text color="warning" class="ion-text-center"><ion-title>{{$t("Heroes")}}</ion-title></ion-text>
-        </ion-item>
+        </ion-button>
+        <ion-title color="warning">{{$t("Heroes")}}</ion-title>
+      </ion-item>
         
       <ion-row class="ion-margin-top">
         <ion-col size="12">
@@ -40,11 +39,7 @@
   </template>
   
   <script setup lang="ts">
-    import { onMounted, ref, provide } from 'vue';
-    import { HeroesStore } from '@/stores/HeroesStore';
-    import { ConditionsStore } from '@/stores/ConditionsStore';
-    import { OptionsStore } from '@/stores/OptionsStore';
-    import { add, chevronBackCircle, close, create } from 'ionicons/icons';
+    import { add, chevronBackCircle, close } from 'ionicons/icons';
     import HeaderToolbar from '@/components/HeaderToolbar.vue';
     import { useI18n } from 'vue-i18n';
     import { useRepo } from 'pinia-orm';
@@ -79,6 +74,9 @@
   </script>
   
   <style scoped>
-
+    ion-title {
+        font-size: 2em;
+        text-transform: capitalize;   
+    }
   </style>
   

@@ -3,13 +3,17 @@
   src: url('/Heroes.ttf'); /* from https://www.dafont.com/fr/heroes-2.font */
 }
 
-ion-title {
+ion-title.main-title {
   font-family: heroes;
   font-size: 50px;
 }
 
 ion-icon{
   font-size: 2em;
+}
+
+ion-router-outlet .ion-page {
+  margin-top: 100px !important
 }
 
 /*.vue3-easy-data-table*/

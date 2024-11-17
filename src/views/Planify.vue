@@ -1,6 +1,5 @@
 <template>
   <ion-page> 
-    <HeaderToolbar></HeaderToolbar>
     <ion-content :fullscreen="true">
       <FightHeader :fight="fight"></FightHeader>
       <ion-card>
@@ -12,7 +11,7 @@
           </ion-button>
         </ion-item>
         <ion-card-content v-if="fight">
-          <Vue3EasyDataTable v-if="fight.oponents" class="data-table" :headers="headers" :items="fight.oponents" 
+          <Vue3EasyDataTable v-if="fight.oponents" class="data-table" :headers="creatureHeaders" :items="fight.oponents" 
           :hide-footer="true" :rows-per-page="200" :sort-by="sortBy" :sort-type="sortType"
           @click-row="creatureInfoModal.open($event.data)">
               <template #item-remove="creature">
@@ -38,7 +37,7 @@
           </ion-button>
         </ion-item>
         <ion-card-content v-if="fight">
-          <Vue3EasyDataTable v-if="fight.treasures" class="data-table" :headers="headers" :items="fight.treasures" 
+          <Vue3EasyDataTable v-if="fight.treasures" class="data-table" :headers="treasureHeaders" :items="fight.treasures" 
           :hide-footer="true" :rows-per-page="200" :sort-by="sortBy" :sort-type="sortType"
           @click-row="treasureInfosModal.open($event.data)">
               <template #item-remove="treasure">
@@ -66,6 +65,8 @@
     import CreatureSearchModal from '@/components/CreatureSearchModal.vue'
     import TreasureSearchModal from '@/components/TreasureSearchModal.vue';
     import TreasureInfosModal from '@/components/TreasureInfosModal.vue';
+    import FightHeader from '@/components/FightHeader.vue';
+    import HeaderToolbar from '@/components/HeaderToolbar.vue';
     import RepoDataInit from '@/components/RepoDataInit.vue';
     import Vue3EasyDataTable from 'vue3-easy-data-table';
     import { add, chevronBackCircle, close } from 'ionicons/icons';
@@ -78,8 +79,6 @@
     import { TreasuresStore } from '@/stores/TreasuresStore';
     import Oponent from '@/models/oponentModel';
     import Treasure from '@/models/treasureModel';
-import FightHeader from '@/components/FightHeader.vue';
-import HeaderToolbar from '@/components/HeaderToolbar.vue';
 
     const i18n = useI18n();
     const router = useRouter();
@@ -87,12 +86,19 @@ import HeaderToolbar from '@/components/HeaderToolbar.vue';
     const route = useRoute();
     const fightID:any = route.params.id;
 
-    const headers: Header[] = [
+    const creatureHeaders: Header[] = [
         { text: i18n.t("Name"), value: "name", sortable: true },
         { text: i18n.t("Level"), value: "data.level", sortable: true},
         { text: i18n.t("HP"), value: "hp", sortable: true},
         { text: "", value: "remove", width: 50},
     ];
+    const treasureHeaders: Header[] = [
+        { text: i18n.t("Name"), value: "name", sortable: true },
+        { text: i18n.t("Level"), value: "data.level", sortable: true},
+        { text: i18n.t("Type"), value: "type", sortable: true},
+        { text: "", value: "remove", width: 50},
+    ];
+
     const sortBy = "name";
     const sortType:SortType = "asc";
 

@@ -1,6 +1,5 @@
 <template>
     <ion-page>
-      <HeaderToolbar></HeaderToolbar>
       <ion-content :fullscreen="true">
         <FightHeader :fight="fight"></FightHeader>
 
@@ -10,6 +9,7 @@
           </ion-item>
           <ion-card-content>
             <ion-item v-for="heroe of heroeRepo.all()" lines="none">
+              <ion-icon slot="start" :icon="personCircle" color="primary"></ion-icon>
               <ion-label v-if="heroe.name">{{heroe.name}}</ion-label>
               <ion-label v-else>{{$t('Unnamed heroe')}}</ion-label>
               <ion-chip v-for="conditionId of heroe.conditions" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionsStore.conditionNameById(conditionId))">
@@ -124,7 +124,7 @@ import HeaderToolbar from '@/components/HeaderToolbar.vue';
     const route = useRoute();
   
     const headers: Header[] = [
-        { text: "Type", value: "type", sortable: true, width:50 },
+        { text: "", value: "type", sortable: true, width:50 },
         { text: "Name", value: "name", sortable: true },
         { text: "Perception", value: "perception_rolled", sortable: true, width:100},
         { text: "HP", value: "hp", sortable: true, width: 50},
