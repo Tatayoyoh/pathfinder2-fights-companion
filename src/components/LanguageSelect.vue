@@ -1,13 +1,13 @@
 <template>
     <ion-button id="language-popover" :slot="slot" shape="rounded" fill="outline">
         <ion-avatar class="small-icon ion-margin-end">
-            <img :src="'/countries/'+optionsStore.language+'.png'" />
+            <img :src="'/countries/'+localeFromLocale(optionsStore.language)+'.png'" />
         </ion-avatar>
         <ion-label>{{$t(languageFromLocale(optionsStore.language))}}</ion-label>
         <ion-popover trigger="language-popover" :dismiss-on-select="true">
             <ion-content>
                 <ion-list>
-                    <ion-item v-for="c in countries" lines="none" button @click="optionsStore.language = c.locale">
+                    <ion-item v-for="c in countries" lines="none" button @click="changeLocale(c)">
                         <ion-avatar>
                             <img :src="'/countries/'+c.locale+'.png'" />
                         </ion-avatar>
@@ -20,15 +20,9 @@
 </template>
 
 <script setup lang="ts">
-    import { useNavigatorLanguage } from '@vueuse/core'
-    import { watch, onMounted } from 'vue';
-    import { OptionsStore } from '@/stores/OptionsStore';
+    import { countries, OptionsStore } from '@/stores/OptionsStore';
     import { useI18n } from 'vue-i18n';
-    
-    const countries = [
-        {'country':'France', 'language':'french', 'locale':'fr'},
-        {'country':'United-Kingdom', 'language':'english', 'locale':'en'},
-    ]
+
 
     defineProps({
         slot: {
@@ -40,35 +34,23 @@
     const optionsStore = OptionsStore();
     const i18n = useI18n({ useScope: 'global' });
 
-    onMounted(()=>{
-        if(optionsStore.language){
-            i18n.locale.value = optionsStore.language;
-        }
-        
-        watch(optionsStore.language, () => {
-            i18n.locale.value = optionsStore.language;
-        })
-
-        // auto change on browser website locale change
-        const { language } = useNavigatorLanguage();
-        watch(language, () => {
-          optionsStore.language = localeFromLocale(language.value);
-          i18n.locale.value = optionsStore.language;
-        })
-    });
-
-    function languageFromLocale(locale:string):string{
-        for(let c of countries){
-            if(c.locale?.includes(locale.toLowerCase())) return c.language
-        }
-        return '';
+    function changeLocale(country:any){
+        i18n.locale.value = country.locale;
+        optionsStore.language = country.locale
     }
 
     function localeFromLocale(locale:any):string{
         for(let c of countries){
-            if(c.locale?.includes(locale.toLowerCase())) return c.locale
+            if(locale.toLowerCase().includes(c.locale)) return c.locale
         }
-        return '';
+        return 'en'; // default locale
+    }
+
+    function languageFromLocale(locale:string):string{
+        for(let c of countries){
+            if(locale.toLowerCase().includes(c.locale)) return c.language
+        }
+        return 'english'; // default language
     }
 
 </script>

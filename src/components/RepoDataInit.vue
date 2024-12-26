@@ -25,6 +25,8 @@
         if(!treasuresStore.treasures.length){
             treasureInit()
         }
+
+        optionsStore.init();
     });
 
     function conditionsInit(){
