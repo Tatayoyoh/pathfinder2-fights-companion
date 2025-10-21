@@ -12,11 +12,11 @@
               <ion-icon slot="start" :icon="personCircle" color="primary"></ion-icon>
               <ion-label v-if="heroe.name">{{heroe.name}}</ion-label>
               <ion-label v-else>{{$t('Unnamed heroe')}}</ion-label>
-              <ion-chip v-for="conditionId of heroe.conditions" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionsStore.conditionNameById(conditionId))">
-                <ion-icon :icon="close" @click="heroesStore.removeCondition($event, heroe, conditionId)"></ion-icon>
-                <ion-label>{{conditionsStore.conditionNameById(conditionId)}}</ion-label>
+              <ion-chip v-for="condition of heroe.conditions" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(condition.id, condition)">
+                <ion-icon :icon="close" @click="removeCondition($event, heroe, condition.id)"></ion-icon>
+                <ion-label>{{ condition.translate(optionsStore.language) }}</ion-label>
               </ion-chip>
-              <ion-button @click="conditionsStore.editConditionsPopup(heroe)">{{$t('Edit conditions')}}</ion-button>
+              <ion-button @click="editConditionsPopup(heroe)">{{$t('Edit conditions')}}</ion-button>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -74,9 +74,9 @@
               </template>
               <template #item-conditions="oponent">
                   <Popper v-for="conditionId of oponent.conditions" hover arrow>
-                    <ion-chip :id="conditionId" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionsStore.conditionNameById(conditionId))">
-                      <ion-icon :icon="close" @click="fight.removeCondition($event, fight.oponentById(oponent.id), conditionId)"></ion-icon>
-                      <ion-label>{{conditionsStore.conditionNameById(conditionId)}}</ion-label>
+                    <ion-chip :id="conditionId" color="primary" mode="ios" outline="true" @click="conditionInfoModal.open(conditionId, conditionRepo.find(conditionId)?.name)">
+                      <ion-icon :icon="close" @click="removeCondition($event, fight.oponentById(oponent.id), conditionId)"></ion-icon>
+                      <ion-label>{{conditionRepo.find(conditionId)?.name}}</ion-label>
                     </ion-chip>
 
                     <template #content>
@@ -87,7 +87,7 @@
               </template>
 
               <template #item-editconditions="oponent">
-                <ion-button size="small" @click="conditionsStore.editConditionsPopup(fight.oponentById(oponent.id))">{{$t('Edit conditions')}}</ion-button>
+                <ion-button size="small" @click="editConditionsPopup(fight.oponentById(oponent.id))">{{$t('Edit conditions')}}</ion-button>
               </template>
             </Vue3EasyDataTable>
           </ion-card-content>
@@ -97,30 +97,31 @@
         <CreatureInfosModal ref="creatureInfoModal"></CreatureInfosModal>
         <ConditionInfosModal ref="conditionInfoModal"></ConditionInfosModal>
         <!-- <DiceTray></DiceTray> -->
+
+        <RepoDataInit></RepoDataInit>
       </ion-content>
     </ion-page>
   </template>
   
   <script setup lang="ts">
     import { computed, ref } from 'vue';
+    import { chevronBack, chevronForward, close, personCircle, reload } from 'ionicons/icons';
     import CreatureInfosModal from '@/components/CreatureInfosModal.vue'
     import ConditionInfosModal from '@/components/ConditionInfosModal.vue'
-    import { chevronBack, chevronForward, close, personCircle, reload } from 'ionicons/icons';
-    import { HeroesStore } from '@/stores/HeroesStore'
-    import { ConditionsStore } from '@/stores/ConditionsStore';
     import DiceTray from '@/components/DiceTray.vue';
+    import FightHeader from '@/components/FightHeader.vue';
+    import RepoDataInit from '@/components/RepoDataInit.vue';
     import Vue3EasyDataTable from 'vue3-easy-data-table';
     import type { Header, SortType } from "vue3-easy-data-table";
     import { OptionsStore } from '@/stores/OptionsStore';
-    import { useIonRouter } from '@ionic/vue';
+    import { useRoute } from 'vue-router';
+    import { alertController } from '@ionic/vue';
     import { useRepo } from 'pinia-orm';
     import Fight from '@/models/fightModel';
-    import { useRoute } from 'vue-router';
     import Heroe from '@/models/heroeModel';
-import FightHeader from '@/components/FightHeader.vue';
-import HeaderToolbar from '@/components/HeaderToolbar.vue';
+    import Condition from '@/models/conditionModel';
+    import Oponent from '@/models/oponentModel';
 
-    const ionRouter = useIonRouter();
     const route = useRoute();
   
     const headers: Header[] = [
@@ -139,10 +140,10 @@ import HeaderToolbar from '@/components/HeaderToolbar.vue';
     
     // Stores
     const fightRepo = useRepo(Fight).withAllRecursive();
+    const conditionRepo = useRepo(Condition);
     const fightID:any = route.params.id;
     const fight = computed(()=>fightRepo.find(fightID))
     const heroeRepo = useRepo(Heroe).withAllRecursive();
-    const conditionsStore = ConditionsStore();
     const optionsStore = OptionsStore();
   
   
@@ -162,19 +163,60 @@ import HeaderToolbar from '@/components/HeaderToolbar.vue';
       return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
     }
 
+    function removeCondition(event:Event, character:Heroe|Oponent|any, conditionId:string){
+      event.stopPropagation();
+      if(character.player != undefined){
+        character.removeCondition(conditionId)
+        console.log(character)
+        character = heroeRepo.save({id:character.id, conditions:character.conditions})
+        console.log(character)
+      }
+      else{
+        // fightRepo.
+      }
+    }
+
+    async function editConditionsPopup(character:any){
+        let conditionInputs:any = []
+        if(!character.conditions) character.conditions = []
+        for(let condition of conditionRepo.all()){
+          // More informations about alertInput : https://ionicframework.com/docs/api/alert#alertinput
+          conditionInputs.push({
+            label: condition.translate(optionsStore.language),
+            value: condition.id,
+            type: 'checkbox',
+            checked: character.hasCondition(condition.id)
+          })
+        }
+    
+        const alert = await alertController.create({
+          header: "Select a condition",
+          buttons: [{text:'Clear conditions', role:'clearall'},{text:'OK', role:'confirm'}],
+          inputs: conditionInputs,
+        });
+    
+        await alert.present();
+    
+        const {role, data} = await alert.onDidDismiss();
+        if(role == 'clearall') character.conditions = []
+        else {
+          for(let conditionID of data.values){
+            character.conditions.push(conditionRepo.find(conditionID));
+          }
+        }
+
+        console.log(character.conditions)
+
+        if(character.player != undefined) {
+          console.log(character.id)
+          heroeRepo.save({id:character.id, conditions:character.conditions})
+        }
+        
+      }
+
   </script>
   
   <style scoped>
-  @font-face {
-      font-family: heroes;
-      src: url('/Heroes.ttf'); /* from https://www.dafont.com/fr/heroes-2.font */
-  }
-  
-  ion-title {
-    font-family: heroes;
-    font-size: 50px;
-  }
-
   .perception-button ion-select{
     border-left: 1px solid var(--ion-color-primary); 
     margin-left: 10px; 

@@ -33,6 +33,7 @@
         fetch('/conditions.json').then(async(res)=>{
             let conditions = await res.json()
             for(let condition of conditions){
+                condition['id'] = condition['_id']
                 conditionRepo.save(condition)
             }
         })

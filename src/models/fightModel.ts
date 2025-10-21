@@ -15,6 +15,7 @@ export default class Fight extends Model {
             description: this.string(''),
             group: this.string(''),
             ready: this.boolean(false),
+            done: this.boolean(false),
             oponents: this.hasMany(Oponent, 'fightId').onDelete('cascade'),
             treasures: this.hasMany(Treasure, 'fightId').onDelete('cascade')
         }
@@ -25,10 +26,39 @@ export default class Fight extends Model {
     declare description: string
     declare group: string
     declare ready: boolean
+    declare done: boolean
     declare oponents: Oponent[]
     declare treasures: Treasure[]
 
     static piniaOptions = {
         persist: true // for pinia-plugin-persistedstate
     }
+}
+
+const fightRepo = useRepo(Fight);
+
+export const fightGroups = ()=>{
+    // TODO !!
+    let fights = fightRepo.groupBy('group').all()
+    return []
+}
+
+function groups(){
+    let groups:any = {}
+    for(let fight of this.fights){
+        let group = fight.group
+        if(group == '') group = "Ungrouped"
+        if(!groups[group]) groups[group] = []
+        groups[group].push(fight)
+    }
+
+    let ordered = Object.keys(groups).sort().reduce(
+        (obj:any, key) => { 
+          obj[key] = groups[key]; 
+          return obj;
+        }, 
+        {}
+    );
+
+    return ordered
 }

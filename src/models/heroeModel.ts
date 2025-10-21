@@ -10,8 +10,22 @@ export default class Heroe extends Model {
             name: this.string(''),
             player: this.string(''),
             perception: this.number(null),
-            conditions: this.hasMany(Condition, 'conditionId'),
+            conditions: this.attr([]),
+            // conditions: this.hasMany(Condition, 'conditionId'),
         }
+    }
+
+    removeCondition(conditionId:string){
+        this.conditions = this.conditions.filter(function(item:any) {
+          return item !== conditionId
+        });
+    }
+
+    hasCondition(conditionId:string){
+        for(let condition of this.conditions) {
+          if(condition.id == conditionId) return true
+        }
+        return false
     }
 
     declare id: string

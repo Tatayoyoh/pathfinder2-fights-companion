@@ -1,18 +1,9 @@
 # Pathfinder 2e fights companion
 
-🚀 under development
+**🚀 under development**
 
-## Techs
+This app is made to simplify GM fights managements for VirtualTableTop softwares which do not manage fights themself.
 
-* Ionic
-* Vue3
-* vue3-easy-data-table https://hc200ok.github.io/vue3-easy-data-table-doc/
-* vue3-popper https://valgeirb.github.io/vue3-popper/
-* dice-box https://github.com/3d-dice/dice-box / https://fantasticdice.games/
-**OR**
-* dice-roller https://github.com/Matteas-Eden/dice-roller / https://matteas.nz/dice-roller/
-**OR**
-https://dddice.com
 
 ### TODO
 
@@ -36,13 +27,43 @@ https://dddice.com
 * Roll oponent perceptions
 * Roll oponent attacks
 * Quick HP edit
-* Condition impacts on oponent stats
-* Condition impacts on heroes stats
+* Condition modifiers on oponent stats
+* Condition modifiers on heroes stats
 
 ## Planify page
 * Import heroe from pathbuilder2e.com JSON URL
 * Save current setup as JSON
 * Import setup from JSON
+
+## Develop
+
+Install Ionic CLI
+```bash
+npm install -g @ionic/cli
+```
+
+Install project dependencies
+```bash
+npm install
+```
+
+Serve project
+```bash
+ionic serve
+```
+
+## Techs
+
+* Ionic
+* Vue3
+* vue3-easy-data-table https://hc200ok.github.io/vue3-easy-data-table-doc/
+* vue3-popper https://valgeirb.github.io/vue3-popper/
+* dice-box https://github.com/3d-dice/dice-box / https://fantasticdice.games/
+**OR**
+* dice-roller https://github.com/Matteas-Eden/dice-roller / https://matteas.nz/dice-roller/
+**OR**
+https://dddice.com
+
 
 ## Mentions
 

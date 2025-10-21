@@ -51,8 +51,23 @@ export const i18n:any = createI18n({
 
 /* Pinia for storage */
 import { createPinia } from 'pinia';
-import { createORM } from 'pinia-orm'
+import { createORM, CreatePiniaOrm } from 'pinia-orm'
 import piniaPluginPersistedState from "pinia-plugin-persistedstate"
+import axios from 'axios'
+import { createPiniaOrmAxios } from '@pinia-orm/axios'
+
+// const CreatePiniaOrm({
+//                 plugins: [
+//                   createPiniaOrmAxios({
+//                     axios,
+//                     // baseURL: process.env.BASE_URL,
+//                     baseURL: 'http://localhost:8100',
+//                   }),
+//                 ],
+//               })
+
+// EN ATTENTE DE PINIA-ORM 1.10.0 !!!
+
 const pinia = createPinia()
               .use(piniaPluginPersistedState)
               .use(createORM())

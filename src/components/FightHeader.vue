@@ -14,6 +14,10 @@
               <ion-icon aria-hidden="true" src="/planify.svg" />
               <ion-label><b>{{$t('Back to planify')}}</b></ion-label>
             </ion-button>
+            <ion-button v-if="fight.ready" slot="end" @click="done" size="large">
+              <ion-icon aria-hidden="true" src="/rip.svg" />
+              <ion-label><b>{{$t('Done') !}}</b></ion-label>
+            </ion-button>
       </ion-item>
 </template>
 
@@ -42,6 +46,11 @@
         else{
             router.push(`/planify/${props.fight.id}`);
         }
+    }
+
+    function done(){
+        fightRepo.save({id: props.fight.id, done: true})
+        router.push(`/`);
     }
 </script>
 

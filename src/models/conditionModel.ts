@@ -56,6 +56,10 @@ export default class Condition extends Model {
     declare value: number|null
     declare translations: object
 
+    translate(lang:string){
+        if(lang == 'fr') return this.translations.fr.name
+        else return this.name
+    }
 
     static piniaOptions = {
         persist: true // for pinia-plugin-persistedstate
@@ -92,7 +96,7 @@ export default class Condition extends Model {
          
 //         async editConditionsPopup(character:any){
 //             let conditionInputs:any = []
-//             for(let condition of this.conditions){
+//             for(let condition     of this.conditions){
 //               // More informations about alertInput : https://ionicframework.com/docs/api/alert#alertinput
 //               conditionInputs.push({
 //                 label: condition.translations.fr.name,

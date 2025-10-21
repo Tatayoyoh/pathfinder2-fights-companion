@@ -21,6 +21,12 @@ export default class Oponent extends Model {
         }
     }
 
+    removeCondition(conditionId:string){
+        this.conditions = this.conditions.filter(function(item:any) {
+          return item !== conditionId
+        });
+    }
+
     declare id: string
     declare name: string
     declare type: string
