@@ -1,6 +1,6 @@
 <template>
     <ion-buttons slot="start">
-        <ion-button v-if="colorModeToggle" @click="paletteColorChange" color="primary">
+        <ion-button v-if="darkMode" @click="paletteColorChange" color="primary">
             <ion-icon slot="icon-only" :icon="sunny"></ion-icon>
         </ion-button>
         <ion-button v-else @click="paletteColorChange" color="primary">
@@ -13,18 +13,20 @@
     import { ref, onMounted } from 'vue';
     import { ToggleCustomEvent } from '@ionic/vue';
     import { moon, sunny } from 'ionicons/icons';
+    import { OptionsStore } from '@/stores/OptionsStore';
 
-    const colorModeToggle = ref(false)
+    const darkMode = ref(false)
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-
+    const optionStore = OptionsStore()
     const initializeDarkPalette = (isDark:boolean) => {
-        colorModeToggle.value = isDark;
+        darkMode.value = isDark;
         toggleDarkPalette(isDark);
     };
 
     const paletteColorChange = () => {
-        colorModeToggle.value=!colorModeToggle.value
-        toggleDarkPalette(colorModeToggle.value);
+        darkMode.value=!darkMode.value;
+        optionStore.theme = darkMode.value ? 'dark':'light';
+        toggleDarkPalette(darkMode.value);
     };
 
     const toggleDarkPalette = (shouldAdd:boolean) => {
@@ -32,7 +34,13 @@
     };
 
     onMounted(()=>{
-        initializeDarkPalette(prefersDark.matches);
+        if(! optionStore.initialized) optionStore.init()
+        
+        let isDark = prefersDark.matches;
+        if(optionStore.theme != ''){
+            isDark = (optionStore.theme == 'dark') 
+        }
+        initializeDarkPalette(isDark);
     })
 
     // Listen for changes to the prefers-color-scheme media query

@@ -1,6 +1,6 @@
 <template>
+    <div class="background"></div>
     <ion-page>
-      <div class="background"></div>
       <ion-content>
         <ion-row>
           <ion-col sizeLg="8" pushLg="2">
@@ -139,7 +139,7 @@
 </template>
   
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { computed, ref } from 'vue';
     import FightNameModal from '@/components/FightNameModal.vue';
     import RepoDataInit from '@/components/RepoDataInit.vue';
     import { add, archive, create, ellipsisVertical, trash, copyOutline, documentTextOutline, createOutline, checkmarkCircleOutline, copy } from 'ionicons/icons';
@@ -149,6 +149,7 @@
     import { useRepo } from 'pinia-orm'
     import Fight from '@/models/fightModel'
     import {fightGroups} from '@/models/fightModel'
+    import { OptionsStore } from '@/stores/OptionsStore';
 
     const i18n = useI18n();
     const router = useIonRouter();
@@ -159,6 +160,11 @@
     const selection = ref(false)
     const groupEdition:any = ref({});
     const fightRepo = useRepo(Fight);
+    const optionsStore = OptionsStore()
+
+    const backgoundImage = computed(()=> {
+      return optionsStore.theme == 'dark' ? 'url(bg1.jpg)':'url(bg3.jpg)'
+    })
 
     function clickFight(fightId:number){
       if(!selection.value == true){
@@ -199,8 +205,12 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background-image: url('bg1.jpg');
-      opacity: 0.5;
+      background-image: v-bind(backgoundImage);
+      background-position: center center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+      opacity: 0.7;
   }
   ion-content {
     --background: none;
