@@ -144,7 +144,7 @@
     import { ref } from 'vue';
     import FightNameModal from '@/components/FightNameModal.vue';
     import RepoDataInit from '@/components/RepoDataInit.vue';
-    import { add, archive, create, ellipsisVertical, trash, documentTextOutline, createOutline, checkmarkCircleOutline, copy, chevronForwardCircleOutline }, chevronForwardCircleOutline }  from 'ionicons/icons';
+    import { add, archive, create, ellipsisVertical, trash, documentTextOutline, createOutline, checkmarkCircleOutline, copy, chevronForwardCircleOutline }  from 'ionicons/icons';
     import { useI18n } from 'vue-i18n';
     import { useIonRouter } from '@ionic/vue';
     import draggable from 'vuedraggable'
