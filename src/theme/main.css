@@ -16,6 +16,10 @@ ion-router-outlet .ion-page {
   margin-top: 100px !important
 }
 
+ion-list, ion-card {
+  border-radius: 10px;
+}
+
 /*.vue3-easy-data-table*/
 .data-table {
   --easy-table-border: 0px;

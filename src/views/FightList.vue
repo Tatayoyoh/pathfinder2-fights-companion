@@ -1,34 +1,36 @@
 <template>
-    <div class="background"></div>
     <ion-page>
       <ion-content>
         <ion-row>
           <ion-col sizeLg="8" pushLg="2">
-            <ion-item button router-link="/heroes">
-              <ion-text>
-                <ion-title>{{$t('Heroes')}}</ion-title>
-              </ion-text>
-              <ion-button slot="end" router-link="/heroes" expand="block" size="medium" fill="outline">
-                <ion-icon slot="start" :icon="create"></ion-icon>
-                {{$t("Edit heroes")}}
-            </ion-button>
-            </ion-item>
-    
-            <ion-item class="ion-margin-top">
-              <ion-title>{{$t('Your Fights')}}</ion-title>
-              <ion-button @click="fightNameModal.create()" fill="outline" shape="round">
-                <ion-icon slot="start" :icon="add"></ion-icon>
-                {{$t('Add')}}
-              </ion-button>
-              <!-- <ion-button @click="selection=!selection" :fill="selection ? 'solid':'outline'" shape="round">
-                <ion-icon slot="start" :icon="copyOutline"></ion-icon>
-                {{$t('Group')}}
-              </ion-button> -->
-            </ion-item>
-    
             <ion-list>
+              <ion-item button router-link="/heroes" lines="none">
+                <ion-icon slot="start" src="/heroe.svg"></ion-icon>
+                <ion-title class="ion-no-padding">{{$t('Heroes')}}</ion-title>
+                <ion-button slot="end" router-link="/heroes" expand="block" size="medium" fill="outline">
+                  <ion-icon slot="start" :icon="create"></ion-icon>
+                  {{$t("Edit heroes")}}
+              </ion-button>
+              </ion-item>
+            </ion-list>
+    
+            
+            <ion-list class="ion-margin-top">
+              <ion-item lines="none">
+                <ion-icon slot="start" src="/swords.svg"></ion-icon>
+                <ion-title class="ion-no-padding">{{$t('Your Fights')}}</ion-title>
+                <ion-button slot="end" @click="fightNameModal.create()" fill="outline" shape="round">
+                  <ion-icon slot="start" :icon="add"></ion-icon>
+                  {{$t('Add')}}
+                </ion-button>
+                <!-- <ion-button @click="selection=!selection" :fill="selection ? 'solid':'outline'" shape="round">
+                  <ion-icon slot="start" :icon="copyOutline"></ion-icon>
+                  {{$t('Group')}}
+                </ion-button> -->
+              </ion-item>
                 <ion-item v-for="fight in fightRepo.all()" button @click="clickFight(fight.id)">
-                    <ion-text>{{fight.name}}</ion-text>
+                    <ion-icon :icon="chevronForwardCircleOutline" class="ion-margin-end"></ion-icon>
+                    <ion-text class="ion-margin-start">{{fight.name}}</ion-text>
                     <ion-chip v-if="fight.done" color="medium" mode="ios" outline="true" class="ion-margin-start">
                       <ion-icon color="medium" size="large" src="/rip.svg"></ion-icon>
                       <ion-label>{{$t('Done')}}</ion-label>
@@ -139,17 +141,16 @@
 </template>
   
 <script setup lang="ts">
-    import { computed, ref } from 'vue';
+    import { ref } from 'vue';
     import FightNameModal from '@/components/FightNameModal.vue';
     import RepoDataInit from '@/components/RepoDataInit.vue';
-    import { add, archive, create, ellipsisVertical, trash, copyOutline, documentTextOutline, createOutline, checkmarkCircleOutline, copy } from 'ionicons/icons';
+    import { add, archive, create, ellipsisVertical, trash, documentTextOutline, createOutline, checkmarkCircleOutline, copy, chevronForwardCircleOutline }, chevronForwardCircleOutline }  from 'ionicons/icons';
     import { useI18n } from 'vue-i18n';
     import { useIonRouter } from '@ionic/vue';
     import draggable from 'vuedraggable'
     import { useRepo } from 'pinia-orm'
     import Fight from '@/models/fightModel'
     import {fightGroups} from '@/models/fightModel'
-    import { OptionsStore } from '@/stores/OptionsStore';
 
     const i18n = useI18n();
     const router = useIonRouter();
@@ -160,11 +161,6 @@
     const selection = ref(false)
     const groupEdition:any = ref({});
     const fightRepo = useRepo(Fight);
-    const optionsStore = OptionsStore()
-
-    const backgoundImage = computed(()=> {
-      return optionsStore.theme == 'dark' ? 'url(bg1.jpg)':'url(bg3.jpg)'
-    })
 
     function clickFight(fightId:number){
       if(!selection.value == true){
@@ -199,21 +195,5 @@
 </script>
   
 <style scoped>
-  .background{
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-image: v-bind(backgoundImage);
-      background-position: center center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      background-size: cover;
-      opacity: 0.7;
-  }
-  ion-content {
-    --background: none;
-  }
 </style>
   
