@@ -6,11 +6,11 @@
               {{$t('Fights')}}
             </ion-button>
             <ion-title color="warning" v-if="fight"><b>{{fight.name}}</b></ion-title>
-            <ion-button v-if="!fight.ready" slot="end" @click="toggleFight" size="large">
+            <ion-button v-if="fight.oponents.length && !fight.ready" slot="end" @click="toggleFight" size="large">
               <ion-icon aria-hidden="true" src="/swords.svg" />
               <ion-label><b>{{$t('Ready to fight') !}}</b></ion-label>
             </ion-button>
-            <ion-button v-else slot="end" @click="toggleFight" size="large">
+            <ion-button v-else-if="fight.ready" slot="end" @click="toggleFight" size="large">
               <ion-icon aria-hidden="true" src="/planify.svg" />
               <ion-label><b>{{$t('Back to planify')}}</b></ion-label>
             </ion-button>

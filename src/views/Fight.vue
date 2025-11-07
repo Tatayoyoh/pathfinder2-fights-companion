@@ -42,6 +42,7 @@
         <ion-card v-if="fight">
           <ion-item lines="none">
             <ion-button class="perception-button" @click="rollPerceptions" fill="outline" shape="round" slot="start">
+              <ion-icon src="/d20.svg" color="primary"></ion-icon>
               {{$t('Roll perceptions')}}
               <ion-select v-model="optionsStore.perception_roll" class="" @click="$event.stopPropagation()">
                 <ion-select-option value="all">{{$t('For all')}}</ion-select-option>
@@ -217,6 +218,10 @@
   </script>
   
   <style scoped>
+  .perception-button ion-icon{
+    margin-left: 5px;
+    margin-right: 5px;
+  }
   .perception-button ion-select{
     border-left: 1px solid var(--ion-color-primary); 
     margin-left: 10px; 

@@ -4,6 +4,7 @@
       <FightHeader :fight="fight"></FightHeader>
       <ion-card>
         <ion-item lines="none">
+          <ion-icon slot="start" src="/creature.svg" size="large" color="warning"></ion-icon>
           <ion-card-title slot="start">{{$t('Oponents')}}</ion-card-title>
           <ion-button @click="creatureSearchModal.open()" fill="outline" shape="round" slot="start">
             <ion-icon slot="start" :icon="add"></ion-icon>
@@ -30,6 +31,7 @@
 
       <ion-card>
         <ion-item lines="none">
+          <ion-icon slot="start" src="/treasures2.svg" size="large" color="warning"></ion-icon>
           <ion-card-title slot="start">{{$t('Treasures')}}</ion-card-title>
           <ion-button @click="treasureSearchModal.open()" fill="outline" shape="round" slot="start">
             <ion-icon slot="start" :icon="add"></ion-icon>
