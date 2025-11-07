@@ -10,14 +10,12 @@
         <ion-title color="warning">{{$t("Heroes")}}</ion-title>
       </ion-item>
         
-      <ion-row class="ion-margin-top">
-        <ion-col size="12">
-          <ion-button @click="heroeRepo.new()" fill="outline" size="medium" expand="block">
+      <ion-item lines="none" color="none">
+          <ion-button @click="heroeRepo.new()" size="medium" slot="end">
             <ion-icon slot="start" :icon="add"></ion-icon>
             {{$t('Add new')}}
           </ion-button>
-        </ion-col>
-      </ion-row>
+      </ion-item>
   
       <ion-content>
         <ion-card>

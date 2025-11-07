@@ -1,5 +1,5 @@
 <template>
-    <ion-button id="language-popover" :slot="slot" shape="rounded" fill="outline">
+    <ion-button id="language-popover" :slot="slot" shape="rounded" fill="clear">
         <ion-avatar class="small-icon ion-margin-end">
             <img :src="'/countries/'+localeFromLocale(optionsStore.language)+'.png'" />
         </ion-avatar>

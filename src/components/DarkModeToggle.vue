@@ -1,10 +1,10 @@
 <template>
     <ion-buttons slot="start">
-        <ion-button v-if="darkMode" @click="paletteColorChange" color="primary">
-            <ion-icon slot="icon-only" :icon="sunny"></ion-icon>
-        </ion-button>
-        <ion-button v-else @click="paletteColorChange" color="primary">
+        <ion-button v-if="darkMode" @click="paletteColorChange">
             <ion-icon slot="icon-only" :icon="moon"></ion-icon>
+        </ion-button>
+        <ion-button v-else @click="paletteColorChange">
+            <ion-icon slot="icon-only" :icon="sunny"></ion-icon>
         </ion-button>
     </ion-buttons>
 </template>

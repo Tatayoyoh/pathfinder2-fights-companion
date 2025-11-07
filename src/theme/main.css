@@ -20,6 +20,12 @@ ion-list, ion-card {
   border-radius: 10px;
 }
 
+ion-button ,
+ion-button ion-label,
+ion-button ion-text {
+  --color: var(--ion-color-dark)
+}
+
 /*.vue3-easy-data-table*/
 .data-table {
   --easy-table-border: 0px;
